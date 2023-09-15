@@ -14,6 +14,7 @@ class HomeController: UIViewController {
     //MARK: - Properties
     
     private let mapView = MKMapView()
+    private let locationManager = CLLocationManager()
     
     //MARK: - Lifecycle
     
@@ -21,7 +22,7 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         
         checkIfUserIsLoggedIn()
-        //        configureUI()
+        enableLocationServices()
 //        signOut()
     }
     
@@ -54,11 +55,15 @@ class HomeController: UIViewController {
     //MARK: - Helpers
     
     func configureUI() {
-        
-        view.backgroundColor = .red
-        
+        configureMapView()
+    }
+    
+    func configureMapView() {
         view.addSubview(mapView)
         mapView.frame = view.frame
+        
+        mapView.showsUserLocation = true
+        mapView.userTrackingMode = .follow
     }
 }
 
@@ -68,5 +73,37 @@ extension HomeController: AuthenticationDelegate {
     func authenticationDidComplete() {
         configureUI()
         self.dismiss(animated: true)
+    }
+}
+
+//MARK: - Location Services
+
+extension HomeController: CLLocationManagerDelegate {
+    func enableLocationServices() {
+        locationManager.delegate = self
+        
+        switch locationManager.authorizationStatus {
+        case .notDetermined:
+            print("DEBUG: Not determined..")
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted, .denied:
+            break
+        case .authorizedAlways:
+            print("DEBUG: Auth always..")
+            locationManager.startUpdatingLocation()
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        case .authorizedWhenInUse:
+            print("DEBUG: Auth when in use..")
+            locationManager.requestAlwaysAuthorization()
+        @unknown default:
+            break
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        if status == .authorizedWhenInUse {
+            locationManager.requestAlwaysAuthorization()
+        }
     }
 }
