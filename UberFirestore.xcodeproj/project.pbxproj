@@ -21,6 +21,9 @@
 		C2BCFC2D2AB466AB00A67E29 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC2C2AB466AB00A67E29 /* AuthService.swift */; };
 		C2BCFC2F2AB4679D00A67E29 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC2E2AB4679D00A67E29 /* Constants.swift */; };
 		C2BCFC322AB46E0400A67E29 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC312AB46E0400A67E29 /* HomeController.swift */; };
+		C2BCFC342AB4855A00A67E29 /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC332AB4855A00A67E29 /* LocationInputActivationView.swift */; };
+		C2BCFC362AB491EC00A67E29 /* LocationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC352AB491EC00A67E29 /* LocationInputView.swift */; };
+		C2BCFC382AB78AC300A67E29 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC372AB78AC300A67E29 /* LocationCell.swift */; };
 		C2DD7A212AB36A2200E228AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2DD7A202AB36A2200E228AF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +46,9 @@
 		C2BCFC2C2AB466AB00A67E29 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		C2BCFC2E2AB4679D00A67E29 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C2BCFC312AB46E0400A67E29 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		C2BCFC332AB4855A00A67E29 /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
+		C2BCFC352AB491EC00A67E29 /* LocationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputView.swift; sourceTree = "<group>"; };
+		C2BCFC372AB78AC300A67E29 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		C2DD7A202AB36A2200E228AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,6 +147,9 @@
 			isa = PBXGroup;
 			children = (
 				C2AF22172AB34A9D001CB903 /* AuthButton.swift */,
+				C2BCFC332AB4855A00A67E29 /* LocationInputActivationView.swift */,
+				C2BCFC352AB491EC00A67E29 /* LocationInputView.swift */,
+				C2BCFC372AB78AC300A67E29 /* LocationCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -289,9 +298,12 @@
 			files = (
 				C2AF22162AB33F88001CB903 /* RegisterController.swift in Sources */,
 				C2AF22182AB34A9D001CB903 /* AuthButton.swift in Sources */,
+				C2BCFC342AB4855A00A67E29 /* LocationInputActivationView.swift in Sources */,
 				C25A7FCA2AB1CDA6006C09E7 /* AppDelegate.swift in Sources */,
 				C25A7FE52AB1CEB1006C09E7 /* LoginController.swift in Sources */,
+				C2BCFC382AB78AC300A67E29 /* LocationCell.swift in Sources */,
 				C2BCFC322AB46E0400A67E29 /* HomeController.swift in Sources */,
+				C2BCFC362AB491EC00A67E29 /* LocationInputView.swift in Sources */,
 				C25A7FCC2AB1CDA6006C09E7 /* SceneDelegate.swift in Sources */,
 				C25A7FE72AB1D10B006C09E7 /* Extensions.swift in Sources */,
 				C2BCFC2B2AB4653300A67E29 /* User.swift in Sources */,
