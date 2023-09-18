@@ -15,6 +15,10 @@ class LocationInputView: UIView {
     
     //MARK: - Properties
     
+    var user: User? {
+        didSet { configure() }
+    }
+    
     weak var delegate: LocationInputViewDelegate?
     
     private lazy var backButton: UIButton = {
@@ -134,5 +138,7 @@ class LocationInputView: UIView {
     
     //MARK: - Helpers
     
-    
+    func configure() {
+        titleLabel.text = user?.fullname
+    }
 }
