@@ -634,6 +634,11 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
+  - Firebase/CoreOnly (10.14.0):
+    - FirebaseCore (= 10.14.0)
+  - Firebase/Database (10.14.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 10.14.0)
   - FirebaseAppCheckInterop (10.14.0)
   - FirebaseAuth (10.14.0):
     - FirebaseAppCheckInterop (~> 10.0)
@@ -673,6 +678,12 @@ PODS:
     - FirebaseCore (~> 10.0)
     - FirebaseCoreExtension (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
+  - GeoFire (5.0.0):
+    - GeoFire/Database (= 5.0.0)
+  - GeoFire/Database (5.0.0):
+    - Firebase/Database (< 12.0.0, > 7.0.0)
+    - GeoFire/Utils
+  - GeoFire/Utils (5.0.0)
   - GoogleUtilities/AppDelegateSwizzler (7.11.5):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -764,11 +775,13 @@ DEPENDENCIES:
   - FirebaseDatabase
   - FirebaseFirestore
   - FirebaseStorage
+  - GeoFire
 
 SPEC REPOS:
   trunk:
     - abseil
     - BoringSSL-GRPC
+    - Firebase
     - FirebaseAppCheckInterop
     - FirebaseAuth
     - FirebaseAuthInterop
@@ -778,6 +791,7 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseFirestore
     - FirebaseStorage
+    - GeoFire
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
@@ -790,6 +804,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
+  Firebase: 6c1bf3f534bc422d52af2e41fe0d50bf08b6b773
   FirebaseAppCheckInterop: c87f1d5421c852413dd936b2b2340b21e62501a0
   FirebaseAuth: bd1ae3d28beb83bfe9247e50eb82688b683dd770
   FirebaseAuthInterop: 23be77be1ca68e4bd15214f403f807a6ca70d7e0
@@ -799,6 +814,7 @@ SPEC CHECKSUMS:
   FirebaseDatabase: fa6f8e2747c3f168e6996a5fca6daf5c11ebd11b
   FirebaseFirestore: 808dd08cbc1c7be9052055f62ab312fdae611e37
   FirebaseStorage: e97b4bdd84b21ec060d5737a9c4f8f8fc6a0d041
+  GeoFire: a579ffdcdcf6fe74ef9efd7f887d4082598d6d1f
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
   "gRPC-C++": 0968bace703459fd3e5dcb0b2bed4c573dbff046
   gRPC-Core: 17108291d84332196d3c8466b48f016fc17d816d
@@ -808,6 +824,6 @@ SPEC CHECKSUMS:
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
 
-PODFILE CHECKSUM: a43c27c6171b53222de2c5ca959819f12bcfea94
+PODFILE CHECKSUM: 5247aa55b26b39bee2de12ca188926b44048bdae
 
 COCOAPODS: 1.12.1

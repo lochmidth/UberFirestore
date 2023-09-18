@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5E951D74664912D331EA6F08 /* Pods_UberFirestore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 265FFF842EDE6D7CC8AF14C8 /* Pods_UberFirestore.framework */; };
+		C22A8E4F2AB87D8700038624 /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A8E4E2AB87D8700038624 /* LocationHandler.swift */; };
+		C22A8E512AB89B3300038624 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A8E502AB89B3300038624 /* DriverAnnotation.swift */; };
 		C25A7FCA2AB1CDA6006C09E7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A7FC92AB1CDA6006C09E7 /* AppDelegate.swift */; };
 		C25A7FCC2AB1CDA6006C09E7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A7FCB2AB1CDA6006C09E7 /* SceneDelegate.swift */; };
 		C25A7FD12AB1CDA6006C09E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C25A7FCF2AB1CDA6006C09E7 /* Main.storyboard */; };
@@ -32,6 +34,8 @@
 		265FFF842EDE6D7CC8AF14C8 /* Pods_UberFirestore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UberFirestore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		27938FAAF127BF3EDB30B6CF /* Pods-UberFirestore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberFirestore.release.xcconfig"; path = "Target Support Files/Pods-UberFirestore/Pods-UberFirestore.release.xcconfig"; sourceTree = "<group>"; };
 		2A329628C77B8CEE93D840C3 /* Pods-UberFirestore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberFirestore.debug.xcconfig"; path = "Target Support Files/Pods-UberFirestore/Pods-UberFirestore.debug.xcconfig"; sourceTree = "<group>"; };
+		C22A8E4E2AB87D8700038624 /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
+		C22A8E502AB89B3300038624 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		C25A7FC62AB1CDA6006C09E7 /* UberFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C25A7FC92AB1CDA6006C09E7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C25A7FCB2AB1CDA6006C09E7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -161,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				C2BCFC2A2AB4653300A67E29 /* User.swift */,
+				C22A8E502AB89B3300038624 /* DriverAnnotation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 			children = (
 				C25A7FE62AB1D10B006C09E7 /* Extensions.swift */,
 				C2BCFC2E2AB4679D00A67E29 /* Constants.swift */,
+				C22A8E4E2AB87D8700038624 /* LocationHandler.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -299,6 +305,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C22A8E4F2AB87D8700038624 /* LocationHandler.swift in Sources */,
 				C28302D52AB872B000CB64C2 /* UserService.swift in Sources */,
 				C2AF22162AB33F88001CB903 /* RegisterController.swift in Sources */,
 				C2AF22182AB34A9D001CB903 /* AuthButton.swift in Sources */,
@@ -306,6 +313,7 @@
 				C25A7FCA2AB1CDA6006C09E7 /* AppDelegate.swift in Sources */,
 				C25A7FE52AB1CEB1006C09E7 /* LoginController.swift in Sources */,
 				C2BCFC382AB78AC300A67E29 /* LocationCell.swift in Sources */,
+				C22A8E512AB89B3300038624 /* DriverAnnotation.swift in Sources */,
 				C2BCFC322AB46E0400A67E29 /* HomeController.swift in Sources */,
 				C2BCFC362AB491EC00A67E29 /* LocationInputView.swift in Sources */,
 				C25A7FCC2AB1CDA6006C09E7 /* SceneDelegate.swift in Sources */,

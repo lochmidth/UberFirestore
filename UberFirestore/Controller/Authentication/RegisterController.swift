@@ -28,7 +28,7 @@ class RegisterController: UIViewController {
     private let passwordTextField = UITextField()
         .textField(withPlaceholder: "Password", isSecureTextEntry: true)
     private let accountTypeSegmentedControl: UISegmentedControl = {
-       let sc = UISegmentedControl(items: ["Rider", "Driver"])
+        let sc = UISegmentedControl(items: ["Rider", "Driver"])
         sc.backgroundColor = .backgroundColor
         sc.tintColor = UIColor(white: 1, alpha: 0.87)
         sc.selectedSegmentIndex = 0

@@ -13,3 +13,4 @@ let STORAGE_REF = Storage.storage().reference()
 
 let DB_REF = Database.database().reference()
 let REF_USERS = DB_REF.child("users")
+let REF_DRIVER_LOCATIONS = DB_REF.child("driver-locations")
