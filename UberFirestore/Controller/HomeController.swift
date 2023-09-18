@@ -15,6 +15,10 @@ class HomeController: UIViewController {
     
     //MARK: - Properties
     
+    var user: User? {
+        didSet { locationInputView.user = user}
+    }
+    
     private let mapView = MKMapView()
     private let locationManager = CLLocationManager()
     
@@ -30,6 +34,7 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         
         checkIfUserIsLoggedIn()
+        fetchUser()
         //        signOut()
     }
     
@@ -47,6 +52,13 @@ class HomeController: UIViewController {
         } else {
             configureUI()
             enableLocationServices()
+        }
+    }
+    
+    func fetchUser() {
+        UserService.shared.fetchUser { user in
+            self.user = user
+            print(user.fullname)
         }
     }
     
