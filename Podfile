@@ -11,6 +11,7 @@ target 'UberFirestore' do
       pod 'FirebaseDatabase'
       pod 'FirebaseStorage'
       pod 'FirebaseAuth'
+      pod 'GeoFire'
 
 end
 

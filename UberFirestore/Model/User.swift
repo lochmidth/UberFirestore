@@ -7,14 +7,14 @@
 
 import Foundation
 import FirebaseAuth
+import CoreLocation
 
 struct User {
     let email: String
     let fullname: String
-    let uid: String
     let accountType: Int
-    
-    var isCurrentUser: Bool { return Auth.auth().currentUser?.uid == uid }
+    var location: CLLocation?
+    let uid: String
     
     init(uid: String, dictionary: [String: Any]) {
         self.uid = uid
