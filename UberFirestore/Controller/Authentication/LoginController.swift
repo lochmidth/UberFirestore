@@ -17,6 +17,8 @@ class LoginController: UIViewController {
     
     weak var delegate: AuthenticationDelegate?
     
+    var viewModel = LoginViewModel()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "UBER"
@@ -25,9 +27,9 @@ class LoginController: UIViewController {
         return label
     }()
     
-    private let emailTextField = UITextField()
-        .textField(withPlaceholder: "Email", isSecureTextEntry: false)
-    private let passwordTextField = UITextField()
+    private lazy var emailTextField = UITextField()
+        .textField(withPlaceholder: viewModel.emailText, isSecureTextEntry: false)
+    private lazy var passwordTextField = UITextField()
         .textField(withPlaceholder: "Password", isSecureTextEntry: true)
    
     private lazy var emailContainerView = UIView()
@@ -76,15 +78,17 @@ class LoginController: UIViewController {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
         
-        AuthService.shared.logUserIn(withEmail: email, password: password) { result, error in
-            if let error {
+        
+        viewModel.login(withEmail: email, password: password) { result in
+            switch result {
+            case .success:
+                self.delegate?.authenticationDidComplete()
+                
+            case .failure(let error):
                 self.showMessage(withTitle: "Oops!", message: error.localizedDescription)
-                self.passwordTextField.text = ""
-                return
             }
-            
-            self.delegate?.authenticationDidComplete()
         }
+
     }
     
     //MARK: - Helpers

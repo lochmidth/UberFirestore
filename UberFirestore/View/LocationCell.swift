@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import MapKit
 
 class LocationCell: UITableViewCell {
     
     //MARK: - Properties
+    
+    private var viewModel: LocationCellViewModel?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -53,5 +56,10 @@ class LocationCell: UITableViewCell {
     
     //MARK: - Helpers
     
-    
+    func configure(viewModel: LocationCellViewModel) {
+        self.viewModel = viewModel
+        
+        titleLabel.text = viewModel.titleText
+        addressLabel.text = viewModel.addressText
+    }
 }
