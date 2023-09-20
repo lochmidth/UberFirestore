@@ -7,11 +7,17 @@
 
 import UIKit
 
+protocol RideActionViewDelegate: AnyObject {
+    func uploadTrip(_ view: RideActionView)
+}
+
 class RideActionView: UIView {
     
     //MARK: - Properties
     
-    private var viewModel: RideActionViewModel?
+    var viewModel: RideActionViewModel?
+    
+    weak var delegate: RideActionViewDelegate?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -112,7 +118,7 @@ class RideActionView: UIView {
     //MARK: - Actions
     
     @objc func actionButtonPressed() {
-        print("DEBUG: Confirm button pressed..")
+        delegate?.uploadTrip(self)
     }
     
     //MARK: - Helpers

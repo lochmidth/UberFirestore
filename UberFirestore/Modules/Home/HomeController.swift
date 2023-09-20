@@ -29,7 +29,7 @@ class HomeController: UIViewController {
     
     private var viewModel = HomeViewModel()
     
-    private let inputActivationView = LocationInputActivationView()
+    private let LocationinputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
     private let rideActionView = RideActionView()
     private let tableView = UITableView()
@@ -66,7 +66,6 @@ class HomeController: UIViewController {
         if viewModel.isUserLoggedIn {
             configureUI()
             fetchUser()
-            fetchDrivers()
         } else {
             DispatchQueue.main.async {
                 let controller = LoginController()
@@ -81,6 +80,10 @@ class HomeController: UIViewController {
     func fetchUser() {
         viewModel.fetchUser {
             self.locationInputView.user = self.viewModel.user
+            if self.viewModel.user?.accountType == .passenger {
+                self.fetchDrivers()
+                self.configureLocationInputActivationView()
+            }
         }
     }
     
@@ -105,7 +108,7 @@ class HomeController: UIViewController {
             mapView.showAnnotations(mapView.annotations, animated: true)
             
             UIView.animate(withDuration: 0.3) {
-                self.inputActivationView.alpha = 1
+                self.LocationinputActivationView.alpha = 1
                 self.configureActionButton(config: .showMenu)
                 self.animateRideActionView(shouldShow: false)
             }
@@ -121,19 +124,21 @@ class HomeController: UIViewController {
         actionButton.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor,
                             paddingTop: 16, paddingLeft: 20, width: 30, height: 30)
         
-        view.addSubview(inputActivationView)
-        inputActivationView.centerX(inView: view)
-        inputActivationView.setDimensions(height: 50, width: view.frame.width - 64)
-        inputActivationView.anchor(top: actionButton.bottomAnchor, paddingTop: 32)
-        inputActivationView.alpha = 0
-        inputActivationView.delegate = self
-        
-        UIView.animate(withDuration: 2) {
-            self.inputActivationView.alpha = 1
-        }
-        
         configureTableView()
         configureRideActionView()
+    }
+    
+    func configureLocationInputActivationView() {
+        view.addSubview(LocationinputActivationView)
+        LocationinputActivationView.centerX(inView: view)
+        LocationinputActivationView.setDimensions(height: 50, width: view.frame.width - 64)
+        LocationinputActivationView.anchor(top: actionButton.bottomAnchor, paddingTop: 32)
+        LocationinputActivationView.alpha = 0
+        LocationinputActivationView.delegate = self
+        
+        UIView.animate(withDuration: 2) {
+            self.LocationinputActivationView.alpha = 1
+        }
     }
     
     func configureMapView() {
@@ -163,6 +168,7 @@ class HomeController: UIViewController {
     
     func configureRideActionView() {
         view.addSubview(rideActionView)
+        rideActionView.delegate = self
         rideActionView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: rideActionViewHeight)
     }
     
@@ -230,11 +236,21 @@ extension HomeController: AuthenticationDelegate {
     }
 }
 
+//MARK: - RideActionViewDelegate
+
+extension HomeController: RideActionViewDelegate {
+    func uploadTrip(_ view: RideActionView) {
+        viewModel.uploadTrip(view: view) { error, ref in
+            
+        }
+    }
+}
+
 //MARK: - LocationInputActivationViewDelegate
 
 extension HomeController: LocationInputActivationViewDelegate {
     func presentLocationInputView() {
-        inputActivationView.alpha = 0
+        LocationinputActivationView.alpha = 0
         configureLocationInputView()
     }
 }
@@ -252,7 +268,7 @@ extension HomeController: LocationInputViewDelegate {
     func dismissLocationInputView() {
         dismissLocationView { _ in
             UIView.animate(withDuration: 0.5) {
-                self.inputActivationView.alpha = 1
+                self.LocationinputActivationView.alpha = 1
             }
         }
     }

@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseAuth
+import FirebaseDatabase
 import MapKit
 
 class HomeViewModel {
@@ -81,6 +82,19 @@ class HomeViewModel {
             self.route = response.routes[0]
             guard let polyline = self.route?.polyline else { return }
             completion(polyline)
+        }
+    }
+    
+    func uploadTrip(view: RideActionView, completion: @escaping(Error?, DatabaseReference) -> Void) {
+        guard let pickupCoordinates = locationHandler.locationManager.location?.coordinate else { return }
+        guard let destinationCoordinates = view.viewModel?.destination.coordinate else { return }
+        TripService.shared.uploadTrip(pickupCoordinates, destinationCoordinates) { error, ref in
+            if let error {
+                print("DEBUG: Failed to upload trip with error: \(error.localizedDescription)")
+                return
+            }
+            
+            print("DEBUG: Did upload trip successfully")
         }
     }
 }
