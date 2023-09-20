@@ -29,13 +29,17 @@ class HomeController: UIViewController {
     
     private var viewModel = HomeViewModel()
     
-    private let mapView = MKMapView()
-    
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
+    private let rideActionView = RideActionView()
     private let tableView = UITableView()
+    private let mapView = MKMapView()
+    
     private var searchResults = [MKPlacemark]()
+    
     private final let locationInputViewHeight: CGFloat = 200
+    private final let rideActionViewHeight: CGFloat = 300
+
     private var actionButtonConfig = ActionButtonConfiguration()
     
     private lazy var actionButton: UIButton = {
@@ -103,6 +107,7 @@ class HomeController: UIViewController {
             UIView.animate(withDuration: 0.3) {
                 self.inputActivationView.alpha = 1
                 self.configureActionButton(config: .showMenu)
+                self.animateRideActionView(shouldShow: false)
             }
         }
     }
@@ -128,6 +133,7 @@ class HomeController: UIViewController {
         }
         
         configureTableView()
+        configureRideActionView()
     }
     
     func configureMapView() {
@@ -155,6 +161,11 @@ class HomeController: UIViewController {
         }
     }
     
+    func configureRideActionView() {
+        view.addSubview(rideActionView)
+        rideActionView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: rideActionViewHeight)
+    }
+    
     func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -176,6 +187,14 @@ class HomeController: UIViewController {
             self.tableView.frame.origin.y = self.view.frame.height
             self.locationInputView.removeFromSuperview()
         }, completion: completion)
+    }
+    
+    func animateRideActionView(shouldShow: Bool) {
+        let yOrigin = shouldShow ? self.view.frame.height - self.rideActionViewHeight : self.view.frame.height
+        
+        UIView.animate(withDuration: 0.3) {
+            self.rideActionView.frame.origin.y = yOrigin
+        }
     }
     
     func removeAnnotationsAndOverlays() {
@@ -285,7 +304,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section == 1 {
             cell.configure(viewModel: LocationCellViewModel(placemark: searchResults[indexPath.row]))
-            //            cell.viewModel = LocationCellViewModel(placemark: searchResults[indexPath.row])
+            //            cell.viewModel = LocationCellViewModel(destination: searchResults[indexPath.row])
         } else {
             return UITableViewCell()
         }
@@ -310,8 +329,10 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             self.mapView.selectAnnotation(annotation, animated: true)
             
             let annotations = self.mapView.annotations.filter( { !$0.isKind(of: DriverAnnotation.self) } )
+            self.mapView.zoomToFit(annotations: annotations)
             
-            self.mapView.showAnnotations(annotations, animated: true)
+            self.animateRideActionView(shouldShow: true)
+            self.rideActionView.configure(viewModel: RideActionViewModel(placemark: selectedPlacemark))
         }
     }
 }
