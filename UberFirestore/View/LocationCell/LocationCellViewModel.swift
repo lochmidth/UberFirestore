@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-struct LocationCellViewModel {
+class LocationCellViewModel {
     
     private var placemark: MKPlacemark
     

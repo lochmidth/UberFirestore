@@ -23,6 +23,8 @@
 		C28780952ABA155800330B78 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28780942ABA155800330B78 /* LoginViewModel.swift */; };
 		C287809B2ABA1E7000330B78 /* MKLocalSearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C287809A2ABA1E7000330B78 /* MKLocalSearchManager.swift */; };
 		C287809D2ABA69C000330B78 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C287809C2ABA69C000330B78 /* RegisterViewModel.swift */; };
+		C28780A12ABB10FF00330B78 /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28780A02ABB10FF00330B78 /* RideActionView.swift */; };
+		C28780A42ABB122200330B78 /* RideActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28780A32ABB122200330B78 /* RideActionViewModel.swift */; };
 		C2AF22162AB33F88001CB903 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AF22152AB33F88001CB903 /* RegisterController.swift */; };
 		C2AF22182AB34A9D001CB903 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2AF22172AB34A9D001CB903 /* AuthButton.swift */; };
 		C2BCFC2B2AB4653300A67E29 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC2A2AB4653300A67E29 /* User.swift */; };
@@ -56,6 +58,8 @@
 		C28780942ABA155800330B78 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		C287809A2ABA1E7000330B78 /* MKLocalSearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKLocalSearchManager.swift; sourceTree = "<group>"; };
 		C287809C2ABA69C000330B78 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		C28780A02ABB10FF00330B78 /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
+		C28780A32ABB122200330B78 /* RideActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionViewModel.swift; sourceTree = "<group>"; };
 		C2AF22152AB33F88001CB903 /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		C2AF22172AB34A9D001CB903 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
 		C2BCFC2A2AB4653300A67E29 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 				C2BCFC332AB4855A00A67E29 /* LocationInputActivationView.swift */,
 				C2BCFC352AB491EC00A67E29 /* LocationInputView.swift */,
 				C287809F2ABA743C00330B78 /* LocationCell */,
+				C28780A22ABB121100330B78 /* RideActionView */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -218,6 +223,15 @@
 				C2733F572AB8F15C00C24E4E /* LocationCellViewModel.swift */,
 			);
 			path = LocationCell;
+			sourceTree = "<group>";
+		};
+		C28780A22ABB121100330B78 /* RideActionView */ = {
+			isa = PBXGroup;
+			children = (
+				C28780A02ABB10FF00330B78 /* RideActionView.swift */,
+				C28780A32ABB122200330B78 /* RideActionViewModel.swift */,
+			);
+			path = RideActionView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -338,6 +352,8 @@
 			files = (
 				C22A8E4F2AB87D8700038624 /* LocationHandler.swift in Sources */,
 				C28780932ABA062100330B78 /* HomeViewModel.swift in Sources */,
+				C28780A42ABB122200330B78 /* RideActionViewModel.swift in Sources */,
+				C28780A12ABB10FF00330B78 /* RideActionView.swift in Sources */,
 				C28302D52AB872B000CB64C2 /* UserService.swift in Sources */,
 				C2AF22162AB33F88001CB903 /* RegisterController.swift in Sources */,
 				C2AF22182AB34A9D001CB903 /* AuthButton.swift in Sources */,
