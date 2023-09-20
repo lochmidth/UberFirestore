@@ -10,7 +10,7 @@ import MapKit
 
 class RideActionViewModel {
     
-    private var destination: MKPlacemark
+    var destination: MKPlacemark
     
     var titleText: String? {
         destination.name
