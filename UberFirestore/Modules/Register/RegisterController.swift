@@ -13,22 +13,24 @@ class RegisterController: UIViewController {
     
     weak var delegate: AuthenticationDelegate?
     
-    private let titleLabel: UILabel = {
+    var viewModel = RegisterViewModel()
+    
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "UBER"
+        label.text = viewModel.titleText
         label.font = UIFont(name: "Avenir-Light", size: 36)
         label.textColor = .init(white: 1, alpha: 0.8)
         return label
     }()
     
-    private let emailTextField = UITextField()
-        .textField(withPlaceholder: "Email", isSecureTextEntry: false)
-    private let fullnameTextField = UITextField()
-        .textField(withPlaceholder: "Full Name", isSecureTextEntry: false)
-    private let passwordTextField = UITextField()
-        .textField(withPlaceholder: "Password", isSecureTextEntry: true)
-    private let accountTypeSegmentedControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["Rider", "Driver"])
+    private lazy var emailTextField = UITextField()
+        .textField(withPlaceholder: viewModel.emailText, isSecureTextEntry: false)
+    private lazy var fullnameTextField = UITextField()
+        .textField(withPlaceholder: viewModel.fullnameText, isSecureTextEntry: false)
+    private lazy var passwordTextField = UITextField()
+        .textField(withPlaceholder: viewModel.passwordText, isSecureTextEntry: true)
+    private lazy var accountTypeSegmentedControl: UISegmentedControl = {
+        let sc = UISegmentedControl(items: viewModel.segmentItems)
         sc.backgroundColor = .backgroundColor
         sc.tintColor = UIColor(white: 1, alpha: 0.87)
         sc.selectedSegmentIndex = 0
@@ -47,7 +49,7 @@ class RegisterController: UIViewController {
     
     private lazy var SignupButton: AuthButton = {
         let button = AuthButton(type: .system)
-        button.setTitle("Sign Up", for: .normal)
+        button.setTitle(viewModel.buttonText, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
         return button
@@ -87,11 +89,13 @@ class RegisterController: UIViewController {
         guard let fullname = fullnameTextField.text else { return }
         let accountType = accountTypeSegmentedControl.selectedSegmentIndex
         
-        AuthService.shared.createUser(withCredentials:
-                                        AuthCredentials(email: email, password: password, fullname: fullname, accountType: accountType)) { error, ref in
-            
+        viewModel.createUser(withCredentials: AuthCredentials(email: email,
+                                                              password: password,
+                                                              fullname: fullname,
+                                                              accountType: accountType)) { error, ref in
             self.delegate?.authenticationDidComplete()
         }
+        
     }
     
     //MARK: - Helpers

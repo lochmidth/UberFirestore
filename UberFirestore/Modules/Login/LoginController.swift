@@ -17,18 +17,20 @@ class LoginController: UIViewController {
     
     weak var delegate: AuthenticationDelegate?
     
-    private let titleLabel: UILabel = {
+    var viewModel = LoginViewModel()
+    
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "UBER"
+        label.text = viewModel.labelText
         label.font = UIFont(name: "Avenir-Light", size: 36)
         label.textColor = .init(white: 1, alpha: 0.8)
         return label
     }()
     
-    private let emailTextField = UITextField()
-        .textField(withPlaceholder: "Email", isSecureTextEntry: false)
-    private let passwordTextField = UITextField()
-        .textField(withPlaceholder: "Password", isSecureTextEntry: true)
+    private lazy var emailTextField = UITextField()
+        .textField(withPlaceholder: viewModel.emailText, isSecureTextEntry: false)
+    private lazy var passwordTextField = UITextField()
+        .textField(withPlaceholder: viewModel.passwordText, isSecureTextEntry: true)
    
     private lazy var emailContainerView = UIView()
         .inputContainerView(image: UIImage(named: "ic_mail_outline_white_2x"), textField: emailTextField)
@@ -37,7 +39,7 @@ class LoginController: UIViewController {
     
     private lazy var loginButton: AuthButton = {
         let button = AuthButton(type: .system)
-        button.setTitle("Log In", for: .normal)
+        button.setTitle(viewModel.buttonText, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
@@ -76,15 +78,17 @@ class LoginController: UIViewController {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
         
-        AuthService.shared.logUserIn(withEmail: email, password: password) { result, error in
-            if let error {
+        
+        viewModel.login(withEmail: email, password: password) { result in
+            switch result {
+            case .success:
+                self.delegate?.authenticationDidComplete()
+                
+            case .failure(let error):
                 self.showMessage(withTitle: "Oops!", message: error.localizedDescription)
-                self.passwordTextField.text = ""
-                return
             }
-            
-            self.delegate?.authenticationDidComplete()
         }
+
     }
     
     //MARK: - Helpers

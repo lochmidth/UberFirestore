@@ -6,15 +6,17 @@
 //
 
 import UIKit
+import MapKit
 
 class LocationCell: UITableViewCell {
     
     //MARK: - Properties
     
+    private var viewModel: LocationCellViewModel?
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
-        label.text = "123 Title Street"
         return label
     }()
     
@@ -22,7 +24,6 @@ class LocationCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .lightGray
-        label.text = "123 Address Street, Washington, DC"
         return label
     }()
     
@@ -53,5 +54,10 @@ class LocationCell: UITableViewCell {
     
     //MARK: - Helpers
     
-    
+    func configure(viewModel: LocationCellViewModel) {
+        self.viewModel = viewModel
+        
+        titleLabel.text = viewModel.titleText
+        addressLabel.text = viewModel.addressText
+    }
 }
