@@ -19,9 +19,9 @@ class LoginController: UIViewController {
     
     var viewModel = LoginViewModel()
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "UBER"
+        label.text = viewModel.labelText
         label.font = UIFont(name: "Avenir-Light", size: 36)
         label.textColor = .init(white: 1, alpha: 0.8)
         return label
@@ -30,7 +30,7 @@ class LoginController: UIViewController {
     private lazy var emailTextField = UITextField()
         .textField(withPlaceholder: viewModel.emailText, isSecureTextEntry: false)
     private lazy var passwordTextField = UITextField()
-        .textField(withPlaceholder: "Password", isSecureTextEntry: true)
+        .textField(withPlaceholder: viewModel.passwordText, isSecureTextEntry: true)
    
     private lazy var emailContainerView = UIView()
         .inputContainerView(image: UIImage(named: "ic_mail_outline_white_2x"), textField: emailTextField)
@@ -39,7 +39,7 @@ class LoginController: UIViewController {
     
     private lazy var loginButton: AuthButton = {
         let button = AuthButton(type: .system)
-        button.setTitle("Log In", for: .normal)
+        button.setTitle(viewModel.buttonText, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button

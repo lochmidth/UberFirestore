@@ -24,6 +24,7 @@ struct AuthService {
         Auth.auth().signIn(withEmail: email, password: password, completion: completion)
     }
     
+    
     func createUser(withCredentials credentials: AuthCredentials, completion: @escaping(Error?, DatabaseReference) -> Void) {
         Auth.auth().createUser(withEmail: credentials.email, password: credentials.password) { result, error in
             if let error {

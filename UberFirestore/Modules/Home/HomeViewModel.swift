@@ -12,9 +12,16 @@ import MapKit
 class HomeViewModel {
     
     var user: User?
+    let locationHandler = LocationHandler.shared
+    let localSearchManager = MKLocalSearchManager()
+    var route: MKRoute?
     
     var isUserLoggedIn: Bool {
         Auth.auth().currentUser?.uid != nil
+    }
+    
+    func enableLocationServices() {
+        locationHandler.enableLocationServices()
     }
     
     func fetchUser(completion: @escaping () -> Void) {
@@ -26,7 +33,8 @@ class HomeViewModel {
         }
     }
     
-    func fetchDrivers(at location: CLLocation, currentAnnotations: [MKAnnotation], completion: @escaping(DriverAnnotation) -> Void) {
+    func fetchDrivers(currentAnnotations: [MKAnnotation], completion: @escaping(DriverAnnotation) -> Void) {
+        guard let location = locationHandler.locationManager.location else { return }
         UserService.shared.fetchDrivers(location: location) { driver in
             guard let coordinate = driver.location?.coordinate else { return }
             let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
@@ -56,22 +64,25 @@ class HomeViewModel {
         }
     }
     
-    func searchBy(naturalLanguageQuery: String, region: MKCoordinateRegion, completion: @escaping([MKPlacemark]) -> Void) {
-            let request = MKLocalSearch.Request()
-            request.region = region
-            request.naturalLanguageQuery = naturalLanguageQuery
-            
-            let search = MKLocalSearch(request: request)
-            search.start { response, error in
-                guard let response else { return }
-                
-                var results = [MKPlacemark]()
-                
-                response.mapItems.forEach { item in
-                    results.append(item.placemark)
-                }
-                
-                completion(results)
-            }
+    func searchLocationBy(naturalLanguageQuery: String, region: MKCoordinateRegion, completion: @escaping([MKPlacemark]) -> Void) {
+        localSearchManager.searchBy(naturalLanguageQuery: naturalLanguageQuery, region: region, completion: completion)
+    }
+    
+    func generatePolyline(toDestination destination: MKMapItem, completion: @escaping(MKPolyline) -> Void) {
+        
+        let request = MKDirections.Request()
+        request.source = MKMapItem.forCurrentLocation()
+        request.destination = destination
+        request.transportType = .automobile
+        
+        let directionRequest = MKDirections(request: request)
+        directionRequest.calculate { response, error in
+            guard let response else { return }
+            self.route = response.routes[0]
+            guard let polyline = self.route?.polyline else { return }
+            completion(polyline)
         }
+    }
 }
+
+

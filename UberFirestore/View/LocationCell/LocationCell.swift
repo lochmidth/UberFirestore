@@ -17,7 +17,6 @@ class LocationCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
-        label.text = "123 Title Street"
         return label
     }()
     
@@ -25,7 +24,6 @@ class LocationCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .lightGray
-        label.text = "123 Address Street, Washington, DC"
         return label
     }()
     

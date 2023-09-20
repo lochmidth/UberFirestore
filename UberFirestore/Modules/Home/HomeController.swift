@@ -25,14 +25,11 @@ class HomeController: UIViewController {
     
     //MARK: - Properties
     
-    private var user: User? {
-        didSet {  }
-    }
+    private var user: User?
     
     private var viewModel = HomeViewModel()
     
     private let mapView = MKMapView()
-    private let locationManager = LocationHandler.shared.locationManager
     
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
@@ -56,7 +53,7 @@ class HomeController: UIViewController {
         
 //        signOut()
         checkIfUserIsLoggedIn()
-        enableLocationServices()
+        viewModel.enableLocationServices()
     }
     
     //MARK: - API
@@ -84,8 +81,7 @@ class HomeController: UIViewController {
     }
     
     func fetchDrivers() {
-        guard let location = locationManager?.location else { return }
-        viewModel.fetchDrivers(at: location, currentAnnotations: mapView.annotations) { annotation in
+        viewModel.fetchDrivers(currentAnnotations: mapView.annotations) { annotation in
             self.mapView.addAnnotation(annotation)
         }
     }
@@ -101,11 +97,8 @@ class HomeController: UIViewController {
         case .showMenu:
             print("DEBUG: Handle Show menu..")
         case .dismissActionView:
-            mapView.annotations.forEach { annotation in
-                if let anno = annotation as? MKPointAnnotation {
-                    mapView.removeAnnotation(anno)
-                }
-            }
+            removeAnnotationsAndOverlays()
+            mapView.showAnnotations(mapView.annotations, animated: true)
             
             UIView.animate(withDuration: 0.3) {
                 self.inputActivationView.alpha = 1
@@ -185,6 +178,18 @@ class HomeController: UIViewController {
         }, completion: completion)
     }
     
+    func removeAnnotationsAndOverlays() {
+        mapView.annotations.forEach { annotation in
+            if let anno = annotation as? MKPointAnnotation {
+                mapView.removeAnnotation(anno)
+            }
+        }
+        
+        if mapView.overlays.count > 0 {
+            mapView.removeOverlay(mapView.overlays[0])
+        }
+    }
+    
     fileprivate func configureActionButton(config: ActionButtonConfiguration) {
         switch config {
         case .showMenu:
@@ -196,8 +201,6 @@ class HomeController: UIViewController {
         }
     }
 }
-
-//MARK: - Map Helper Functions
 
 //MARK: - AuthenticationDelegate
 
@@ -221,7 +224,7 @@ extension HomeController: LocationInputActivationViewDelegate {
 
 extension HomeController: LocationInputViewDelegate {
     func executeSearch(query: String) {
-        viewModel.searchBy(naturalLanguageQuery: query, region: mapView.region) { results in
+        viewModel.searchLocationBy(naturalLanguageQuery: query, region: mapView.region) { results in
             self.searchResults = results
             self.tableView.reloadData()
         }
@@ -247,31 +250,20 @@ extension HomeController: MKMapViewDelegate {
         }
         return nil
     }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if let route = viewModel.route {
+            let polyline = route.polyline
+            let lineRenderer = MKPolylineRenderer(overlay: polyline)
+            lineRenderer.strokeColor = .mainBlueTint
+            lineRenderer.lineWidth = 4
+            return lineRenderer
+        }
+        return MKOverlayRenderer()
+    }
 }
 
 //MARK: - Location Services
-
-extension HomeController {
-    func enableLocationServices() {
-        guard let locationManager = locationManager else { return }
-        switch locationManager.authorizationStatus {
-        case .notDetermined:
-            print("DEBUG: Not determined..")
-            locationManager.requestWhenInUseAuthorization()
-        case .restricted, .denied:
-            break
-        case .authorizedAlways:
-            print("DEBUG: Auth always..")
-            locationManager.startUpdatingLocation()
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        case .authorizedWhenInUse:
-            print("DEBUG: Auth when in use..")
-            locationManager.requestAlwaysAuthorization()
-        @unknown default:
-            break
-        }
-    }
-}
 
 //MARK: - UITableViewDelegate/DataSource
 
@@ -306,11 +298,20 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         
         configureActionButton(config: .dismissActionView)
         
+        let destination = MKMapItem(placemark: selectedPlacemark)
+        viewModel.generatePolyline(toDestination: destination) { polyline in
+            self.mapView.addOverlay(polyline)
+        }
+        
         dismissLocationView { _ in
             let annotation = MKPointAnnotation()
             annotation.coordinate = selectedPlacemark.coordinate
             self.mapView.addAnnotation(annotation)
             self.mapView.selectAnnotation(annotation, animated: true)
+            
+            let annotations = self.mapView.annotations.filter( { !$0.isKind(of: DriverAnnotation.self) } )
+            
+            self.mapView.showAnnotations(annotations, animated: true)
         }
     }
 }
