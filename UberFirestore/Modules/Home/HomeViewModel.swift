@@ -27,7 +27,6 @@ class HomeViewModel {
     }
     
     func fetchUser(completion: @escaping () -> Void) {
-        
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
         UserService.shared.fetchUser(forUid: currentUid) { user in
             self.user = user
@@ -86,7 +85,7 @@ class HomeViewModel {
         }
     }
     
-    func uploadTrip(view: RideActionView, completion: @escaping(Error?, DatabaseReference) -> Void) {
+    func uploadTrip(view: RideActionView, completion: @escaping() -> Void) {
         guard let pickupCoordinates = locationHandler.locationManager.location?.coordinate else { return }
         guard let destinationCoordinates = view.viewModel?.destination.coordinate else { return }
         TripService.shared.uploadTrip(pickupCoordinates, destinationCoordinates) { error, ref in
@@ -95,12 +94,19 @@ class HomeViewModel {
                 return
             }
             
-            print("DEBUG: Did upload trip successfully")
+            completion()
         }
     }
     
     func observeTrips(forDriver driver: User, completion: @escaping() -> Void) {
-        TripService.shared.observerTrips(forDriver: driver) { trip in
+        TripService.shared.observeTrips(forDriver: driver) { trip in
+            self.trip = trip
+            completion()
+        }
+    }
+    
+    func observeCurrentTrip(completion: @escaping() -> Void) {
+        TripService.shared.observeCurrentTrip { trip in
             self.trip = trip
             completion()
         }
