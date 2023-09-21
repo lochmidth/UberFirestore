@@ -86,6 +86,7 @@ class HomeController: UIViewController {
             if self.viewModel.user?.accountType == .passenger {
                 self.fetchDrivers()
                 self.configureLocationInputActivationView()
+                self.observeCurrentTrip()
             } else {
                 self.observeTrips()
             }
@@ -109,6 +110,15 @@ class HomeController: UIViewController {
                 let nav = UINavigationController(rootViewController: controller)
                 nav.modalPresentationStyle = .fullScreen
                 self.present(nav, animated: true)
+            }
+        }
+    }
+    
+    func observeCurrentTrip() {
+        viewModel.observeCurrentTrip {
+            guard let state = self.viewModel.trip?.state else { return }
+            if state == .accepted {
+                self.shouldPresentLoadingView(false)
             }
         }
     }
@@ -260,8 +270,9 @@ extension HomeController: AuthenticationDelegate {
 
 extension HomeController: RideActionViewDelegate {
     func uploadTrip(_ view: RideActionView) {
-        viewModel.uploadTrip(view: view) { error, ref in
-            
+        viewModel.uploadTrip(view: view) {
+            self.shouldPresentLoadingView(true, message: "Finding you a ride...")
+            self.animateRideActionView(shouldShow: false)
         }
     }
 }
