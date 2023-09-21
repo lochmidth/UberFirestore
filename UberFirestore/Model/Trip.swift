@@ -17,12 +17,12 @@ enum TripState: Int {
 struct Trip {
     var pickupCoordinates: CLLocationCoordinate2D!
     var destinationCoordinates: CLLocationCoordinate2D!
-    let passenferUid: String!
+    let passengerUid: String!
     var driverUid: String?
     var state: TripState!
     
     init(passengerUid: String, dictionary: [String: Any]) {
-        self.passenferUid = passengerUid
+        self.passengerUid = passengerUid
         
         if let pickupCoordinates = dictionary["pickupCoordinates"] as? NSArray {
             guard let lat = pickupCoordinates[0] as? CLLocationDegrees else { return }

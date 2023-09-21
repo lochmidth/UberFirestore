@@ -25,8 +25,6 @@ class HomeController: UIViewController {
     
     //MARK: - Properties
     
-    private var user: User?
-    
     private var viewModel = HomeViewModel()
     
     private let LocationinputActivationView = LocationInputActivationView()
@@ -60,6 +58,11 @@ class HomeController: UIViewController {
         viewModel.enableLocationServices()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
     //MARK: - API
     
     func checkIfUserIsLoggedIn() {
@@ -83,6 +86,8 @@ class HomeController: UIViewController {
             if self.viewModel.user?.accountType == .passenger {
                 self.fetchDrivers()
                 self.configureLocationInputActivationView()
+            } else {
+                self.observeTrips()
             }
         }
     }
@@ -90,6 +95,21 @@ class HomeController: UIViewController {
     func fetchDrivers() {
         viewModel.fetchDrivers(currentAnnotations: mapView.annotations) { annotation in
             self.mapView.addAnnotation(annotation)
+        }
+    }
+    
+    func observeTrips() {
+        guard let driver = viewModel.user else { return }
+        viewModel.observeTrips(forDriver: driver) {
+            if self.viewModel.trip?.state == .requested {
+                guard let trip = self.viewModel.trip else { return }
+                let controller = PickupController()
+                controller.delegate = self
+                controller.viewModel = PickupViewModel(trip: trip)
+                let nav = UINavigationController(rootViewController: controller)
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true)
+            }
         }
     }
     
@@ -271,6 +291,16 @@ extension HomeController: LocationInputViewDelegate {
                 self.LocationinputActivationView.alpha = 1
             }
         }
+    }
+}
+
+//MARK: - PickUpControllerDelegate
+
+extension HomeController: PickUpControllerDelegate {
+    func didAcceptTrip(_ trip: Trip) {
+        viewModel.trip = trip
+        viewModel.trip?.state = .accepted
+        dismiss(animated: true)
     }
 }
 

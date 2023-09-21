@@ -13,6 +13,7 @@ import MapKit
 class HomeViewModel {
     
     var user: User?
+    var trip: Trip?
     let locationHandler = LocationHandler.shared
     let localSearchManager = MKLocalSearchManager()
     var route: MKRoute?
@@ -95,6 +96,13 @@ class HomeViewModel {
             }
             
             print("DEBUG: Did upload trip successfully")
+        }
+    }
+    
+    func observeTrips(forDriver driver: User, completion: @escaping() -> Void) {
+        TripService.shared.observerTrips(forDriver: driver) { trip in
+            self.trip = trip
+            completion()
         }
     }
 }
