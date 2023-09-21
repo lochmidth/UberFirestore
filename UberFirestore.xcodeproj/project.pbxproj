@@ -17,6 +17,8 @@
 		C25A7FD62AB1CDA7006C09E7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C25A7FD42AB1CDA7006C09E7 /* LaunchScreen.storyboard */; };
 		C25A7FE52AB1CEB1006C09E7 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A7FE42AB1CEB1006C09E7 /* LoginController.swift */; };
 		C25A7FE72AB1D10B006C09E7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A7FE62AB1D10B006C09E7 /* Extensions.swift */; };
+		C263F69F2ABCADA300BFB80F /* PickupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C263F69E2ABCADA300BFB80F /* PickupController.swift */; };
+		C263F6A12ABCADFA00BFB80F /* PickupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C263F6A02ABCADFA00BFB80F /* PickupViewModel.swift */; };
 		C2733F582AB8F15C00C24E4E /* LocationCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2733F572AB8F15C00C24E4E /* LocationCellViewModel.swift */; };
 		C28302D52AB872B000CB64C2 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28302D42AB872B000CB64C2 /* UserService.swift */; };
 		C28780932ABA062100330B78 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28780922ABA062100330B78 /* HomeViewModel.swift */; };
@@ -54,6 +56,8 @@
 		C25A7FD72AB1CDA7006C09E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C25A7FE42AB1CEB1006C09E7 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		C25A7FE62AB1D10B006C09E7 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		C263F69E2ABCADA300BFB80F /* PickupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupController.swift; sourceTree = "<group>"; };
+		C263F6A02ABCADFA00BFB80F /* PickupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupViewModel.swift; sourceTree = "<group>"; };
 		C2733F572AB8F15C00C24E4E /* LocationCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCellViewModel.swift; sourceTree = "<group>"; };
 		C28302D42AB872B000CB64C2 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		C28780922ABA062100330B78 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -185,12 +189,22 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		C263F69D2ABCAD7300BFB80F /* Pickup */ = {
+			isa = PBXGroup;
+			children = (
+				C263F69E2ABCADA300BFB80F /* PickupController.swift */,
+				C263F6A02ABCADFA00BFB80F /* PickupViewModel.swift */,
+			);
+			path = Pickup;
+			sourceTree = "<group>";
+		};
 		C28780962ABA197200330B78 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				C28780992ABA19BE00330B78 /* Home */,
-				C28780982ABA199100330B78 /* Register */,
 				C28780972ABA197D00330B78 /* Login */,
+				C28780982ABA199100330B78 /* Register */,
+				C28780992ABA19BE00330B78 /* Home */,
+				C263F69D2ABCAD7300BFB80F /* Pickup */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -358,6 +372,7 @@
 			files = (
 				C22A8E4F2AB87D8700038624 /* LocationHandler.swift in Sources */,
 				C28780932ABA062100330B78 /* HomeViewModel.swift in Sources */,
+				C263F6A12ABCADFA00BFB80F /* PickupViewModel.swift in Sources */,
 				C28780A42ABB122200330B78 /* RideActionViewModel.swift in Sources */,
 				C28780A12ABB10FF00330B78 /* RideActionView.swift in Sources */,
 				C28780A62ABB7FEB00330B78 /* TripService.swift in Sources */,
@@ -375,6 +390,7 @@
 				C2BCFC362AB491EC00A67E29 /* LocationInputView.swift in Sources */,
 				C25A7FCC2AB1CDA6006C09E7 /* SceneDelegate.swift in Sources */,
 				C25A7FE72AB1D10B006C09E7 /* Extensions.swift in Sources */,
+				C263F69F2ABCADA300BFB80F /* PickupController.swift in Sources */,
 				C2BCFC2B2AB4653300A67E29 /* User.swift in Sources */,
 				C287809D2ABA69C000330B78 /* RegisterViewModel.swift in Sources */,
 				C2733F582AB8F15C00C24E4E /* LocationCellViewModel.swift in Sources */,
