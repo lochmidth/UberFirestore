@@ -65,6 +65,12 @@ class HomeViewModel {
         }
     }
     
+    func fetchUser(forUid uid: String, completion: @escaping(User) -> Void) {
+        UserService.shared.fetchUser(forUid: uid) { user in
+            completion(user)
+        }
+    }
+    
     func searchLocationBy(naturalLanguageQuery: String, region: MKCoordinateRegion, completion: @escaping([MKPlacemark]) -> Void) {
         localSearchManager.searchBy(naturalLanguageQuery: naturalLanguageQuery, region: region, completion: completion)
     }
@@ -87,7 +93,7 @@ class HomeViewModel {
     
     func uploadTrip(view: RideActionView, completion: @escaping() -> Void) {
         guard let pickupCoordinates = locationHandler.locationManager.location?.coordinate else { return }
-        guard let destinationCoordinates = view.viewModel?.destination.coordinate else { return }
+        guard let destinationCoordinates = view.viewModel?.destination?.coordinate else { return }
         TripService.shared.uploadTrip(pickupCoordinates, destinationCoordinates) { error, ref in
             if let error {
                 print("DEBUG: Failed to upload trip with error: \(error.localizedDescription)")

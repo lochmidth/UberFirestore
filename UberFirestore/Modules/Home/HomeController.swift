@@ -119,6 +119,12 @@ class HomeController: UIViewController {
             guard let state = self.viewModel.trip?.state else { return }
             if state == .accepted {
                 self.shouldPresentLoadingView(false)
+                
+                guard let driverUid = self.viewModel.trip?.driverUid else { return }
+                self.viewModel.fetchUser(forUid: driverUid) { driver in
+                    self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: driver, config: .tripAccepted))
+                }
+                self.animateRideActionView(shouldShow: true)
             }
         }
     }
@@ -166,7 +172,7 @@ class HomeController: UIViewController {
         LocationinputActivationView.alpha = 0
         LocationinputActivationView.delegate = self
         
-        UIView.animate(withDuration: 2) {
+        UIView.animate(withDuration: 1) {
             self.LocationinputActivationView.alpha = 1
         }
     }
@@ -225,7 +231,7 @@ class HomeController: UIViewController {
         }, completion: completion)
     }
     
-    func animateRideActionView(shouldShow: Bool) {
+    func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil, config: RideActionViewConfiguration? = nil) {
         let yOrigin = shouldShow ? self.view.frame.height - self.rideActionViewHeight : self.view.frame.height
         
         UIView.animate(withDuration: 0.3) {
@@ -311,6 +317,26 @@ extension HomeController: PickUpControllerDelegate {
     func didAcceptTrip(_ trip: Trip) {
         viewModel.trip = trip
         viewModel.trip?.state = .accepted
+        
+        let anno = MKPointAnnotation()
+        anno.coordinate = trip.pickupCoordinates
+        mapView.addAnnotation(anno)
+        mapView.selectAnnotation(anno, animated: true)
+        
+        let placemark = MKPlacemark(coordinate: trip.pickupCoordinates)
+        let mapItem = MKMapItem(placemark: placemark)
+        viewModel.generatePolyline(toDestination: mapItem) { polyline in
+            self.mapView.addOverlay(polyline)
+            self.mapView.zoomToFit(annotations: self.mapView.annotations)
+            
+            
+            self.viewModel.fetchUser(forUid: trip.passengerUid) { passenger in
+                self.rideActionView.configure(viewModel: RideActionViewModel(placemark: placemark, user: self.viewModel.user, interlocutor: passenger, config: .tripAccepted))
+            }
+            
+            self.animateRideActionView(shouldShow: true)
+        }
+        
         dismiss(animated: true)
     }
 }
@@ -388,8 +414,8 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             let annotations = self.mapView.annotations.filter( { !$0.isKind(of: DriverAnnotation.self) } )
             self.mapView.zoomToFit(annotations: annotations)
             
+            self.rideActionView.configure(viewModel: RideActionViewModel(placemark: selectedPlacemark, config: .requestRide))
             self.animateRideActionView(shouldShow: true)
-            self.rideActionView.configure(viewModel: RideActionViewModel(placemark: selectedPlacemark))
         }
     }
 }

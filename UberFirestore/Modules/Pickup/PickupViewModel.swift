@@ -12,10 +12,7 @@ import FirebaseDatabase
 class PickupViewModel {
     
     let trip: Trip
-    
-    
-    
-    
+
     func handleAcceptTrip(trip: Trip, completion: @escaping() -> Void) {
         TripService.shared.acceptTrip(trip: trip) { error, ref in
             if let error {

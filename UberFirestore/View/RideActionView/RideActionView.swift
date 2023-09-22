@@ -15,8 +15,8 @@ class RideActionView: UIView {
     
     //MARK: - Properties
     
+    var buttonAction = ButtonAction()
     var viewModel: RideActionViewModel?
-    
     weak var delegate: RideActionViewDelegate?
     
     private let titleLabel: UILabel = {
@@ -41,30 +41,33 @@ class RideActionView: UIView {
         let view = UIView()
         view.backgroundColor = .black
         
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 30)
-        label.textColor = .white
-        label.text = "X"
-        
-        view.addSubview(label)
-        label.centerX(inView: view)
-        label.centerY(inView: view)
+        view.addSubview(infoViewLabel)
+        infoViewLabel.centerX(inView: view)
+        infoViewLabel.centerY(inView: view)
         
         return view
     }()
     
-    private let uberXLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18)
-        label.text = "UberX"
+        label.text = "Loading..."
         label.textAlignment = .center
         return label
     }()
     
-    private lazy var actionButton: UIButton = {
+    private let infoViewLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 30)
+        label.textColor = .white
+        label.text = "?"
+        return label
+    }()
+    
+    lazy var actionButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .black
-        button.setTitle("CONFIRM UBERX", for: .normal)
+        button.setTitle("Loading...", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(actionButtonPressed), for: .touchUpInside)
@@ -94,14 +97,14 @@ class RideActionView: UIView {
         infoView.setDimensions(height: 60, width: 60)
         infoView.layer.cornerRadius = 60 / 2
         
-        addSubview(uberXLabel)
-        uberXLabel.anchor(top: infoView.bottomAnchor, paddingTop: 8)
-        uberXLabel.centerX(inView: self)
+        addSubview(nameLabel)
+        nameLabel.anchor(top: infoView.bottomAnchor, paddingTop: 8)
+        nameLabel.centerX(inView: self)
         
         let separatorView = UIView()
         separatorView.backgroundColor = .lightGray
         addSubview(separatorView)
-        separatorView.anchor(top: uberXLabel.bottomAnchor, left: leftAnchor, right: rightAnchor,
+        separatorView.anchor(top: nameLabel.bottomAnchor, left: leftAnchor, right: rightAnchor,
                              paddingTop: 4, height: 0.75)
         
         addSubview(actionButton)
@@ -118,7 +121,19 @@ class RideActionView: UIView {
     //MARK: - Actions
     
     @objc func actionButtonPressed() {
-        delegate?.uploadTrip(self)
+        guard let viewModel else { return }
+        switch viewModel.buttonAction {
+        case .requestRide:
+            delegate?.uploadTrip(self)
+        case .cancel:
+            print("DEBUG: Handle cancel..")
+        case .getDirections:
+            print("DEBUG: Handle getDricetions..")
+        case .pickup:
+            print("DEBUG: Handle pickup..")
+        case .dropOff:
+            print("DEBUG: Handle cancel")
+        }
     }
     
     //MARK: - Helpers
@@ -126,7 +141,11 @@ class RideActionView: UIView {
     func configure(viewModel: RideActionViewModel) {
         self.viewModel = viewModel
         
+        actionButton.setTitle(viewModel.buttonText, for: .normal)
+        actionButton.isEnabled = viewModel.activateButton ?? true
         titleLabel.text = viewModel.titleText
         addressLabel.text = viewModel.addressText
+        infoViewLabel.text = viewModel.infoLabelText
+        nameLabel.text = viewModel.nameText
     }
 }
