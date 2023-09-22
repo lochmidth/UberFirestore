@@ -37,7 +37,6 @@ extension UIViewController {
             indicator.style = UIActivityIndicatorView.Style.large
             indicator.color = .white
             indicator.center = view.center
-            indicator.tag = 1
             
             let label = UILabel()
             label.text = message
@@ -45,11 +44,10 @@ extension UIViewController {
             label.textColor = .white
             label.textAlignment = .center
             label.alpha = 0.87
-            label.tag = 1
             
             self.view.addSubview(loadingView)
-            view.addSubview(indicator)
-            view.addSubview(label)
+            loadingView.addSubview(indicator)
+            loadingView.addSubview(label)
             
             label.centerX(inView: view)
             label.anchor(top: indicator.bottomAnchor, paddingTop: 32)
