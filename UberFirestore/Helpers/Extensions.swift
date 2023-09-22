@@ -282,5 +282,12 @@ extension MKMapView {
         let insets = UIEdgeInsets(top: 75, left: 75, bottom: 300, right: 75)
         setVisibleMapRect(zoomRect, edgePadding: insets, animated: true)
     }
+    
+    func centerMapOnUserLocation() {
+        guard let coordinate = LocationHandler.shared.locationManager.location?.coordinate else { return }
+        
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        setRegion(region, animated: true)
+    }
 }
 

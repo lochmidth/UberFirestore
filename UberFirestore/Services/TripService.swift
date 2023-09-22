@@ -38,11 +38,21 @@ struct TripService {
         }
     }
     
+    func observeTripCancelled(trip: Trip, completion: @escaping(DataSnapshot) -> Void) {
+        REF_TRIPS.child(trip.passengerUid).observeSingleEvent(of: .childRemoved, with: completion)
+    }
+    
     func acceptTrip(trip: Trip, completion: @escaping(Error?, DatabaseReference) -> Void) {
         guard let driverUid = Auth.auth().currentUser?.uid else { return }
         let values = ["driverUid": driverUid, "state": TripState.accepted.rawValue] as [String : Any]
         
         REF_TRIPS.child(trip.passengerUid).updateChildValues(values, withCompletionBlock: completion)
+    }
+    
+    func cancelTrip(completion: @escaping(Error?, DatabaseReference) -> Void) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+        REF_TRIPS.child(currentUid).removeValue(completionBlock: completion)
     }
     
     func observeCurrentTrip(completion: @escaping(Trip) -> Void) {

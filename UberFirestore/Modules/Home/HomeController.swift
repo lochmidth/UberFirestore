@@ -231,7 +231,7 @@ class HomeController: UIViewController {
         }, completion: completion)
     }
     
-    func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil, config: RideActionViewConfiguration? = nil) {
+    func animateRideActionView(shouldShow: Bool) {
         let yOrigin = shouldShow ? self.view.frame.height - self.rideActionViewHeight : self.view.frame.height
         
         UIView.animate(withDuration: 0.3) {
@@ -250,6 +250,8 @@ class HomeController: UIViewController {
             mapView.removeOverlay(mapView.overlays[0])
         }
     }
+    
+    
     
     fileprivate func configureActionButton(config: ActionButtonConfiguration) {
         switch config {
@@ -275,10 +277,25 @@ extension HomeController: AuthenticationDelegate {
 //MARK: - RideActionViewDelegate
 
 extension HomeController: RideActionViewDelegate {
+    func cancelRide(_ view: RideActionView) {
+        viewModel.cancelTrip(view: view) {
+            UIView.animate(withDuration: 0.5) {
+                self.LocationinputActivationView.alpha = 1
+                self.actionButton.isHidden = false
+                self.animateRideActionView(shouldShow: false)
+                self.configureActionButton(config: .showMenu)
+                self.configureLocationInputActivationView()
+                self.removeAnnotationsAndOverlays()
+                self.mapView.centerMapOnUserLocation()
+            }
+        }
+    }
+    
     func uploadTrip(_ view: RideActionView) {
         viewModel.uploadTrip(view: view) {
             self.shouldPresentLoadingView(true, message: "Finding you a ride...")
             self.animateRideActionView(shouldShow: false)
+            self.actionButton.isHidden = true
         }
     }
 }
@@ -328,6 +345,13 @@ extension HomeController: PickUpControllerDelegate {
         viewModel.generatePolyline(toDestination: mapItem) { polyline in
             self.mapView.addOverlay(polyline)
             self.mapView.zoomToFit(annotations: self.mapView.annotations)
+            
+            self.viewModel.observeTripCancelled(trip: trip) {
+                self.animateRideActionView(shouldShow: false)
+                self.removeAnnotationsAndOverlays()
+                self.mapView.centerMapOnUserLocation()
+                self.showMessage(withTitle: "Sorry!", message: "The passenger cancelled the trip.")
+            }
             
             
             self.viewModel.fetchUser(forUid: trip.passengerUid) { passenger in

@@ -9,6 +9,7 @@ import UIKit
 
 protocol RideActionViewDelegate: AnyObject {
     func uploadTrip(_ view: RideActionView)
+    func cancelRide(_ view: RideActionView)
 }
 
 class RideActionView: UIView {
@@ -126,7 +127,7 @@ class RideActionView: UIView {
         case .requestRide:
             delegate?.uploadTrip(self)
         case .cancel:
-            print("DEBUG: Handle cancel..")
+            delegate?.cancelRide(self)
         case .getDirections:
             print("DEBUG: Handle getDricetions..")
         case .pickup:

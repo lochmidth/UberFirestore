@@ -104,9 +104,26 @@ class HomeViewModel {
         }
     }
     
+    func cancelTrip(view: RideActionView, completion: @escaping() -> Void ) {
+        TripService.shared.cancelTrip { error, ref in
+            if let error {
+                print("DEBUG: Error while canceling the trip, \(error.localizedDescription)")
+                return
+            }
+        }
+        
+        completion()
+    }
+    
     func observeTrips(forDriver driver: User, completion: @escaping() -> Void) {
         TripService.shared.observeTrips(forDriver: driver) { trip in
             self.trip = trip
+            completion()
+        }
+    }
+    
+    func observeTripCancelled(trip: Trip, completion: @escaping() -> Void) {
+        TripService.shared.observeTripCancelled(trip: trip) { snapshot in
             completion()
         }
     }
