@@ -11,6 +11,7 @@ import MapKit
 enum RideActionViewConfiguration {
     case requestRide
     case tripAccepted
+    case driverArrived
     case pickupPassenger
     case tripInProgress
     case endTrip
@@ -53,7 +54,7 @@ class RideActionViewModel {
     var buttonAction = ButtonAction()
     var destination: MKPlacemark?
     var user: User?
-    var driver: User?
+    var interlocutor: User?
     
     var titleText: String?
     var addressText: String?
@@ -67,7 +68,7 @@ class RideActionViewModel {
         self.destination = placemark
         self.config = config
         self.user = user
-        self.driver = interlocutor
+        self.interlocutor = interlocutor
         
         switch config {
         case .requestRide:
@@ -94,13 +95,34 @@ class RideActionViewModel {
             guard let interlocutor else { return }
             infoLabelText = String(interlocutor.fullname.first ?? "X")
             nameText = interlocutor.fullname
+            
+        case .driverArrived:
+            guard let user = user else { return }
+            guard let interlocutor else { return }
+            
+            infoLabelText = String(interlocutor.fullname.first ?? "X")
+            nameText = interlocutor.fullname
+            
+            if user.accountType == .passenger {
+                titleText = "Driver Has Arrived"
+                addressText = "Please meet driver at pickup location"
+                buttonAction = .cancel
+                buttonText = buttonAction.description
+                activateButton = true
+            }
         case .pickupPassenger:
+            guard let interlocutor else { return }
+            infoLabelText = String(interlocutor.fullname.first ?? "X")
+            nameText = interlocutor.fullname
             titleText = "Arrived at Passenger Location"
             buttonAction = .pickup
             buttonText = buttonAction.description
             activateButton = true
         case .tripInProgress:
             guard let user else { return }
+            guard let interlocutor else { return }
+            infoLabelText = String(interlocutor.fullname.first ?? "X")
+            nameText = interlocutor.fullname
             
             if user.accountType == .driver {
                 buttonText = "TRIP IN PROGRESS"
@@ -114,8 +136,12 @@ class RideActionViewModel {
             titleText = "En Route To Destination"
         case .endTrip:
             guard let user else { return }
+            guard let interlocutor else { return }
+            infoLabelText = String(interlocutor.fullname.first ?? "X")
+            nameText = interlocutor.fullname
+            titleText = "Arrived at Destination"
             
-            if user.accountType == .driver {
+            if user.accountType == .passenger {
                 buttonText = "ARRIVED AT DESTINATION"
                 activateButton = false
             } else {

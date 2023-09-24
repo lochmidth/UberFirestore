@@ -10,14 +10,17 @@ import UIKit
 protocol RideActionViewDelegate: AnyObject {
     func uploadTrip(_ view: RideActionView)
     func cancelRide(_ view: RideActionView)
+    func pickupPassenger(_ view: RideActionView)
+    func dropOffPassenger(_ view: RideActionView)
 }
 
 class RideActionView: UIView {
     
     //MARK: - Properties
     
-    var buttonAction = ButtonAction()
     var viewModel: RideActionViewModel?
+    
+    var buttonAction = ButtonAction()
     weak var delegate: RideActionViewDelegate?
     
     private let titleLabel: UILabel = {
@@ -131,9 +134,9 @@ class RideActionView: UIView {
         case .getDirections:
             print("DEBUG: Handle getDricetions..")
         case .pickup:
-            print("DEBUG: Handle pickup..")
+            delegate?.pickupPassenger(self)
         case .dropOff:
-            print("DEBUG: Handle cancel")
+            delegate?.dropOffPassenger(self)
         }
     }
     

@@ -39,7 +39,7 @@ struct TripService {
     }
     
     func observeTripCancelled(trip: Trip, completion: @escaping(DataSnapshot) -> Void) {
-        REF_TRIPS.child(trip.passengerUid).observeSingleEvent(of: .childRemoved, with: completion)
+            REF_TRIPS.child(trip.passengerUid).observeSingleEvent(of: .childRemoved, with: completion)
     }
     
     func acceptTrip(trip: Trip, completion: @escaping(Error?, DatabaseReference) -> Void) {
@@ -49,7 +49,7 @@ struct TripService {
         REF_TRIPS.child(trip.passengerUid).updateChildValues(values, withCompletionBlock: completion)
     }
     
-    func cancelTrip(completion: @escaping(Error?, DatabaseReference) -> Void) {
+    func deleteTrip(completion: @escaping(Error?, DatabaseReference) -> Void) {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
         
         REF_TRIPS.child(currentUid).removeValue(completionBlock: completion)
@@ -63,6 +63,14 @@ struct TripService {
             let uid = snapshot.key
             let trip = Trip(passengerUid: uid, dictionary: dictionary)
             completion(trip)
+        }
+    }
+    
+    func updateTripState(trip: Trip, state: TripState, completion: @escaping(Error?, DatabaseReference) -> Void) {
+        REF_TRIPS.child(trip.passengerUid).child("state").setValue(state.rawValue, withCompletionBlock: completion)
+        
+        if state == .completed {
+            REF_TRIPS.child(trip.passengerUid).removeAllObservers()
         }
     }
 }

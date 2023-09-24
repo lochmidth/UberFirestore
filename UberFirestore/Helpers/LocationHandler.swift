@@ -7,11 +7,18 @@
 
 import CoreLocation
 
+protocol LocationHandlerDelegate: AnyObject {
+    func didStartMonitoringFor(region: CLRegion)
+    func didEnterRegion(region: CLRegion)
+}
+
 class LocationHandler: NSObject, CLLocationManagerDelegate {
     
     static let shared = LocationHandler()
     var locationManager: CLLocationManager!
     var location: CLLocation?
+    
+    weak var delegate: LocationHandlerDelegate?
     
     override init() {
         super.init()
@@ -45,5 +52,15 @@ class LocationHandler: NSObject, CLLocationManagerDelegate {
         @unknown default:
             break
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        delegate?.didStartMonitoringFor(region: region)
+    }
+
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        delegate?.didEnterRegion(region: region)
+
+//        NotificationCenter.default.post(name: Notification.Name("NotificationIdentifier"), object: nil)
     }
 }

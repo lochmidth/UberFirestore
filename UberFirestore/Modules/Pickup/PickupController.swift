@@ -107,15 +107,10 @@ class PickupController: UIViewController {
         let region = MKCoordinateRegion(center: viewModel.trip.pickupCoordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
         mapView.setRegion(region, animated: false)
         
-        let anno = MKPointAnnotation()
-        anno.coordinate = viewModel.trip.pickupCoordinates
-        mapView.addAnnotation(anno)
-        mapView.selectAnnotation(anno, animated: true)
+        self.mapView.addAnnotationAndSelect(forcoordinate: viewModel.trip.pickupCoordinates)
     }
     
     func configure() {
-        guard let viewModel = viewModel else { return }
-        
         configureMapView()
     }
 }

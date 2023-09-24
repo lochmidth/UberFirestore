@@ -36,4 +36,12 @@ struct UserService {
             })
         }
     }
+    
+    func updateDriverLocation(location: CLLocation, completion: @escaping(Error?) -> Void) {
+        guard let driverUid = Auth.auth().currentUser?.uid else { return }
+        let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
+        geofire.setLocation(location, forKey: driverUid) { error in
+            completion(error)
+        }
+    }
 }

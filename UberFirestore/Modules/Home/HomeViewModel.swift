@@ -34,26 +34,10 @@ class HomeViewModel {
         }
     }
     
-    func fetchDrivers(currentAnnotations: [MKAnnotation], completion: @escaping(DriverAnnotation) -> Void) {
+    func fetchDrivers(completion: @escaping(User) -> Void) {
         guard let location = locationHandler.locationManager.location else { return }
         UserService.shared.fetchDrivers(location: location) { driver in
-            guard let coordinate = driver.location?.coordinate else { return }
-            let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
-            
-            var driverIsVisible: Bool {
-                return currentAnnotations.contains { annotation in
-                    guard let driverAnno = annotation as? DriverAnnotation else { return false}
-                    if driverAnno.uid == driver.uid {
-                        driverAnno.updateAnnotationPosition(withCoordinate: coordinate)
-                        return true
-                    }
-                    return false
-                }
-            }
-            
-            if !driverIsVisible {
-                completion(annotation)
-            }
+            completion(driver)
         }
     }
     
@@ -68,6 +52,13 @@ class HomeViewModel {
     func fetchUser(forUid uid: String, completion: @escaping(User) -> Void) {
         UserService.shared.fetchUser(forUid: uid) { user in
             completion(user)
+        }
+    }
+    
+    func startTrip(completion: @escaping() -> Void) {
+        guard let trip else { return }
+        TripService.shared.updateTripState(trip: trip, state: .inProgress) { _, _ in
+            completion()
         }
     }
     
@@ -104,8 +95,8 @@ class HomeViewModel {
         }
     }
     
-    func cancelTrip(view: RideActionView, completion: @escaping() -> Void ) {
-        TripService.shared.cancelTrip { error, ref in
+    func deleteTrip(completion: @escaping() -> Void ) {
+        TripService.shared.deleteTrip { error, ref in
             if let error {
                 print("DEBUG: Error while canceling the trip, \(error.localizedDescription)")
                 return
@@ -131,6 +122,30 @@ class HomeViewModel {
     func observeCurrentTrip(completion: @escaping() -> Void) {
         TripService.shared.observeCurrentTrip { trip in
             self.trip = trip
+            completion()
+        }
+    }
+    
+    func updateDriverLocation(location: CLLocation, completion: @escaping() -> Void) {
+        guard let user = user else { return }
+        guard user.accountType == .driver else { return }
+        
+        UserService.shared.updateDriverLocation(location: location) { error in
+            if let error {
+                print("Error while updating the driver location, \(error.localizedDescription)")
+                return
+            }
+            
+            completion()
+        }
+    }
+    
+    func updateTripState(trip: Trip, state: TripState, completion: @escaping() -> Void) {
+        TripService.shared.updateTripState(trip: trip, state: state) { error, ref in
+            if let error {
+                print("Error while updating the trip state, \(error.localizedDescription)")
+                return
+            }
             completion()
         }
     }

@@ -269,6 +269,11 @@ extension MKPlacemark {
     }
 }
 
+enum AnnotationType: String {
+    case pickup
+    case destination
+}
+
 extension MKMapView {
     func zoomToFit(annotations: [MKAnnotation]) {
         var zoomRect = MKMapRect.null
@@ -288,6 +293,36 @@ extension MKMapView {
         
         let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
         setRegion(region, animated: true)
+    }
+    
+    func setCustomRegion(withType type: AnnotationType, withCoordinates coordinates: CLLocationCoordinate2D) {
+        let region = CLCircularRegion(center: coordinates, radius: 25, identifier: type.rawValue)
+        LocationHandler.shared.locationManager.startMonitoring(for: region)
+    }
+    
+    func zoomForActiveTrip(withDriverUid uid: String, mapView: MKMapView) {
+        var annotations = [MKAnnotation]()
+        
+        mapView.annotations.forEach { annotation in
+            if let driverAnno = annotation as? DriverAnnotation {
+                if driverAnno.uid == uid {
+                    annotations.append(driverAnno)
+                }
+            }
+            
+            if let userAnno = annotation as? MKUserLocation {
+                annotations.append(userAnno)
+            }
+        }
+        print("DEBUG: Annotations array is \(annotations)")
+        mapView.zoomToFit(annotations: annotations)
+    }
+    
+    func addAnnotationAndSelect(forcoordinate coordinate: CLLocationCoordinate2D) {
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        addAnnotation(annotation)
+        selectAnnotation(annotation, animated: true)
     }
 }
 
