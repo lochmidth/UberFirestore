@@ -30,8 +30,10 @@ class HomeController: UIViewController {
     private let LocationinputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
     private let rideActionView = RideActionView()
+    private let locationHandler = LocationHandler.shared
     private let tableView = UITableView()
     private let mapView = MKMapView()
+    
     
     private var searchResults = [MKPlacemark]()
     
@@ -69,6 +71,7 @@ class HomeController: UIViewController {
         if viewModel.isUserLoggedIn {
             configureUI()
             fetchUser()
+            LocationHandler.shared.delegate = self
         } else {
             DispatchQueue.main.async {
                 let controller = LoginController()
@@ -76,6 +79,28 @@ class HomeController: UIViewController {
                 let nav = UINavigationController(rootViewController: controller)
                 nav.modalPresentationStyle = .fullScreen
                 self.present(nav, animated: true)
+            }
+        }
+    }
+    
+    func startTrip() {
+        viewModel.startTrip {
+            guard let trip = self.viewModel.trip else { return }
+            
+            self.viewModel.fetchUser(forUid: trip.passengerUid) { interlocutor in
+                self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: interlocutor, config: .tripInProgress))
+            }
+            
+            self.removeAnnotationsAndOverlays()
+            self.mapView.addAnnotationAndSelect(forcoordinate: trip.destinationCoordinates)
+            self.mapView.setCustomRegion(withType: .destination, withCoordinates: trip.destinationCoordinates)
+            
+            let placemark = MKPlacemark(coordinate: trip.destinationCoordinates)
+            let mapItem = MKMapItem(placemark: placemark)
+            
+            self.viewModel.generatePolyline(toDestination: mapItem) { polyline in
+                self.mapView.addOverlay(polyline)
+                self.mapView.zoomToFit(annotations: self.mapView.annotations)
             }
         }
     }
@@ -94,8 +119,24 @@ class HomeController: UIViewController {
     }
     
     func fetchDrivers() {
-        viewModel.fetchDrivers(currentAnnotations: mapView.annotations) { annotation in
-            self.mapView.addAnnotation(annotation)
+        viewModel.fetchDrivers { driver in
+            guard let coordinate = driver.location?.coordinate else { return }
+            let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
+            
+            var driverIsVisible: Bool {
+                return self.mapView.annotations.contains { anno in
+                    guard let driverAnno = anno as? DriverAnnotation else { return false }
+                    if driverAnno.uid == driver.uid {
+                        driverAnno.updateAnnotationPosition(withCoordinate: coordinate)
+                        return true
+                    }
+                    return false
+                }
+            }
+            
+            if !driverIsVisible {
+                self.mapView.addAnnotation(annotation)
+            }
         }
     }
     
@@ -116,15 +157,47 @@ class HomeController: UIViewController {
     
     func observeCurrentTrip() {
         viewModel.observeCurrentTrip {
-            guard let state = self.viewModel.trip?.state else { return }
-            if state == .accepted {
+            guard let trip = self.viewModel.trip else { return }
+            guard let state = trip.state else { return }
+            guard let driverUid = self.viewModel.trip?.driverUid else { return }
+
+            
+            switch state {
+            case .requested:
+                break
+            case .accepted:
                 self.shouldPresentLoadingView(false)
+                self.removeAnnotationsAndOverlays()
+                self.mapView.zoomForActiveTrip(withDriverUid: driverUid, mapView: self.mapView)
                 
-                guard let driverUid = self.viewModel.trip?.driverUid else { return }
                 self.viewModel.fetchUser(forUid: driverUid) { driver in
                     self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: driver, config: .tripAccepted))
                 }
                 self.animateRideActionView(shouldShow: true)
+            case .driverArrived:
+                self.viewModel.fetchUser(forUid: driverUid) { driver in
+                    self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: driver, config: .driverArrived))
+                }
+            case .inProgress:
+                self.viewModel.fetchUser(forUid: driverUid) { driver in
+                    self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: driver, config: .tripInProgress))
+                }
+            case .arrivedAtDestination:
+                self.viewModel.fetchUser(forUid: driverUid) { driver in
+                    self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: driver, config: .endTrip))
+                }
+            case .completed:
+                self.viewModel.deleteTrip {
+                    self.animateRideActionView(shouldShow: false)
+                    self.mapView.centerMapOnUserLocation()
+                    self.configureActionButton(config: .showMenu)
+                    self.actionButton.isHidden = false
+                    self.showMessage(withTitle: "Trip Completed!", message: "We hope you enjoyed your trip")
+                    
+                    UIView.animate(withDuration: 0.3) {
+                        self.LocationinputActivationView.alpha = 1
+                    }
+                }
             }
         }
     }
@@ -149,6 +222,10 @@ class HomeController: UIViewController {
                 self.animateRideActionView(shouldShow: false)
             }
         }
+    }
+    
+    @objc func didEnterRegion() {
+        
     }
     
     //MARK: - Helpers
@@ -277,8 +354,12 @@ extension HomeController: AuthenticationDelegate {
 //MARK: - RideActionViewDelegate
 
 extension HomeController: RideActionViewDelegate {
+    func pickupPassenger(_ view: RideActionView) {
+        startTrip()
+    }
+    
     func cancelRide(_ view: RideActionView) {
-        viewModel.cancelTrip(view: view) {
+        viewModel.deleteTrip() {
             UIView.animate(withDuration: 0.5) {
                 self.LocationinputActivationView.alpha = 1
                 self.actionButton.isHidden = false
@@ -296,6 +377,15 @@ extension HomeController: RideActionViewDelegate {
             self.shouldPresentLoadingView(true, message: "Finding you a ride...")
             self.animateRideActionView(shouldShow: false)
             self.actionButton.isHidden = true
+        }
+    }
+    
+    func dropOffPassenger(_ view: RideActionView) {
+        guard let trip = viewModel.trip else { return}
+        viewModel.updateTripState(trip: trip, state: .completed) {
+            self.removeAnnotationsAndOverlays()
+            self.mapView.centerMapOnUserLocation()
+            self.animateRideActionView(shouldShow: false)
         }
     }
 }
@@ -335,10 +425,9 @@ extension HomeController: PickUpControllerDelegate {
         viewModel.trip = trip
         viewModel.trip?.state = .accepted
         
-        let anno = MKPointAnnotation()
-        anno.coordinate = trip.pickupCoordinates
-        mapView.addAnnotation(anno)
-        mapView.selectAnnotation(anno, animated: true)
+        self.mapView.addAnnotationAndSelect(forcoordinate: trip.pickupCoordinates)
+        
+        mapView.setCustomRegion(withType: .pickup, withCoordinates: trip.pickupCoordinates)
         
         let placemark = MKPlacemark(coordinate: trip.pickupCoordinates)
         let mapItem = MKMapItem(placemark: placemark)
@@ -350,7 +439,7 @@ extension HomeController: PickUpControllerDelegate {
                 self.animateRideActionView(shouldShow: false)
                 self.removeAnnotationsAndOverlays()
                 self.mapView.centerMapOnUserLocation()
-                self.showMessage(withTitle: "Sorry!", message: "The passenger cancelled the trip.")
+                self.showMessage(withTitle: "Oops!", message: "The passenger has decided to cancel this ride. Press OK to continue.")
             }
             
             
@@ -359,11 +448,49 @@ extension HomeController: PickUpControllerDelegate {
             }
             
             self.animateRideActionView(shouldShow: true)
+//            NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterRegion), name: Notification.Name("NotificationIdentifier"), object: nil)
         }
         
         dismiss(animated: true)
     }
 }
+
+//MARK: - LocationHandlerDelegate
+
+extension HomeController: LocationHandlerDelegate {
+    func didStartMonitoringFor(region: CLRegion) {
+        if region.identifier == AnnotationType.pickup.rawValue {
+            print("DEBUG: Did start monitoring pick up region, \(region)")
+        }
+        if region.identifier == AnnotationType.destination.rawValue {
+            print("DEBUG: Did start monitoring destination region, \(region)")
+        }
+    }
+    
+    func didEnterRegion(region: CLRegion) {
+        guard let trip = viewModel.trip else { return }
+        
+        if region.identifier == AnnotationType.pickup.rawValue {
+            viewModel.updateTripState(trip: trip, state: .driverArrived) {
+                self.viewModel.fetchUser(forUid: trip.passengerUid) { interlocutor in
+                    self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: interlocutor, config: .pickupPassenger))
+    //                NotificationCenter.default.removeObserver(self)
+                }
+            }
+        }
+        if region.identifier == AnnotationType.destination.rawValue {
+            viewModel.updateTripState(trip: trip, state: .arrivedAtDestination) {
+                self.viewModel.fetchUser(forUid: trip.passengerUid) { interlocutor in
+                    self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: interlocutor, config: .endTrip))
+    //                NotificationCenter.default.removeObserver(self)
+                }
+            }
+        }
+        
+        
+    }
+}
+
 
 //MARK: - MKMapViewDelegate
 
@@ -387,9 +514,14 @@ extension HomeController: MKMapViewDelegate {
         }
         return MKOverlayRenderer()
     }
+    
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        guard let location = userLocation.location else { return }
+        viewModel.updateDriverLocation(location: location) {
+            
+        }
+    }
 }
-
-//MARK: - Location Services
 
 //MARK: - UITableViewDelegate/DataSource
 
@@ -430,15 +562,14 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         }
         
         dismissLocationView { _ in
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = selectedPlacemark.coordinate
-            self.mapView.addAnnotation(annotation)
-            self.mapView.selectAnnotation(annotation, animated: true)
+            
+            self.mapView.addAnnotationAndSelect(forcoordinate: selectedPlacemark.coordinate)
             
             let annotations = self.mapView.annotations.filter( { !$0.isKind(of: DriverAnnotation.self) } )
             self.mapView.zoomToFit(annotations: annotations)
             
             self.rideActionView.configure(viewModel: RideActionViewModel(placemark: selectedPlacemark, config: .requestRide))
+            
             self.animateRideActionView(shouldShow: true)
         }
     }
