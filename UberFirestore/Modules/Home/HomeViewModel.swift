@@ -17,6 +17,7 @@ class HomeViewModel {
     let locationHandler = LocationHandler.shared
     let localSearchManager = MKLocalSearchManager()
     var route: MKRoute?
+    var savedLocations = [MKPlacemark]()
     
     var isUserLoggedIn: Bool {
         Auth.auth().currentUser?.uid != nil
@@ -38,14 +39,6 @@ class HomeViewModel {
         guard let location = locationHandler.locationManager.location else { return }
         UserService.shared.fetchDrivers(location: location) { driver in
             completion(driver)
-        }
-    }
-    
-    func signOut() {
-        do {
-            try Auth.auth().signOut()
-        } catch let error {
-            print("DEBUG: Error while signing out, \(error.localizedDescription)")
         }
     }
     
@@ -147,6 +140,67 @@ class HomeViewModel {
                 return
             }
             completion()
+        }
+    }
+    
+    //FIXME: - self.savedLocations is always empty.
+    
+//    func configureSavedUserLocations(completion: @escaping([MKPlacemark]) -> Void) {
+//        if let homeLocation = user?.homeLocation {
+//            print("DEBUG: homeLocation \(homeLocation)")
+//            geocodeAddressString(address: homeLocation) { placemark in
+//                self.savedLocations.append(placemark)
+//            }
+//        }
+//        if let workLocation = user?.workLocation {
+//            print("DEBUG: workLocation \(workLocation)")
+//            geocodeAddressString(address: workLocation) { placemark in
+//                self.savedLocations.append(placemark)
+//            }
+//        }
+//        print("DEBUG: configureSavedUserLocations \(self.savedLocations)")
+//        completion(self.savedLocations)
+//    }
+    
+    func configureSavedUserLocations(completion: @escaping([MKPlacemark]) -> Void) {
+        var placemarksToFetch = 0
+        var fetchedPlacemarks = [MKPlacemark]()
+        
+        if let homeLocation = user?.homeLocation {
+            placemarksToFetch += 1
+            geocodeAddressString(address: homeLocation) { placemark in
+                fetchedPlacemarks.append(placemark)
+                placemarksToFetch -= 1
+                if placemarksToFetch == 0 {
+                    self.savedLocations.append(contentsOf: fetchedPlacemarks)
+                    completion(fetchedPlacemarks)
+                }
+            }
+        }
+        if let workLocation = user?.workLocation {
+            placemarksToFetch += 1
+            geocodeAddressString(address: workLocation) { placemark in
+                fetchedPlacemarks.append(placemark)
+                placemarksToFetch -= 1
+                if placemarksToFetch == 0 {
+                    self.savedLocations.append(contentsOf: fetchedPlacemarks)
+                    completion(fetchedPlacemarks)
+                }
+            }
+        }
+    }
+
+    
+    func geocodeAddressString(address: String, completion: @escaping(MKPlacemark) -> Void) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            if let error {
+                print("DEBUG: Error wihle fetching saved addresses, \(error)")
+                return
+            }
+            guard let clPlacemark = placemarks?.first else { return }
+            let placemark = MKPlacemark(placemark: clPlacemark)
+            completion(placemark)
         }
     }
 }

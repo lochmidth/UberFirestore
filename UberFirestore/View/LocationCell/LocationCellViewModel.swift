@@ -10,17 +10,19 @@ import MapKit
 
 class LocationCellViewModel {
     
-    private var placemark: MKPlacemark
+    private var placemark: MKPlacemark?
+    var type: LocationType?
     
-    var titleText: String? {
-        placemark.name
-    }
+    var titleText: String?
     
-    var addressText: String? {
-        placemark.address
-    }
+    var addressText: String?
     
-    init(placemark: MKPlacemark) {
-        self.placemark = placemark
+    
+    init(placemark: MKPlacemark? = nil, type: LocationType? = nil) {
+        if let placemark = placemark {
+            titleText = placemark.name
+            addressText = placemark.address
+        }
+        self.type = type
     }
 }

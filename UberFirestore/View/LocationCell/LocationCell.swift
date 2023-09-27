@@ -12,15 +12,15 @@ class LocationCell: UITableViewCell {
     
     //MARK: - Properties
     
-    private var viewModel: LocationCellViewModel?
+    var viewModel: LocationCellViewModel?
     
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
     
-    private let addressLabel: UILabel = {
+    let addressLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .lightGray

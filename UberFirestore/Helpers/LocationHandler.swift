@@ -25,6 +25,7 @@ class LocationHandler: NSObject, CLLocationManagerDelegate {
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
+        locationManager.distanceFilter = 250.0
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
