@@ -42,9 +42,7 @@ class SettingsController: UITableViewController {
     
     weak var delegate: SettingsControllerDelegate?
     
-    var viewModel: SettingsViewModel? {
-        didSet { configure() }
-    }
+    var viewModel: SettingsViewModel?
     
     private lazy var infoHeader = UserInfoHeader()
     
@@ -93,10 +91,9 @@ class SettingsController: UITableViewController {
         infoHeader.configure(viewModel: UserInfoHeaderViewModel(user: user))
     }
     
-    func configure() {
-//        guard let viewModel = viewModel else { return }
-        
-        
+    func configure(viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
+        self.tableView.reloadData()
     }
 }
 
@@ -164,7 +161,5 @@ extension SettingsController: AddLocationControllerDelegate {
                 user.workLocation = locationString
             }
         }
-        
-        self.tableView.reloadData()
     }
 }

@@ -314,7 +314,6 @@ extension MKMapView {
                 annotations.append(userAnno)
             }
         }
-        print("DEBUG: Annotations array is \(annotations)")
         mapView.zoomToFit(annotations: annotations)
     }
     

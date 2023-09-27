@@ -143,25 +143,6 @@ class HomeViewModel {
         }
     }
     
-    //FIXME: - self.savedLocations is always empty.
-    
-//    func configureSavedUserLocations(completion: @escaping([MKPlacemark]) -> Void) {
-//        if let homeLocation = user?.homeLocation {
-//            print("DEBUG: homeLocation \(homeLocation)")
-//            geocodeAddressString(address: homeLocation) { placemark in
-//                self.savedLocations.append(placemark)
-//            }
-//        }
-//        if let workLocation = user?.workLocation {
-//            print("DEBUG: workLocation \(workLocation)")
-//            geocodeAddressString(address: workLocation) { placemark in
-//                self.savedLocations.append(placemark)
-//            }
-//        }
-//        print("DEBUG: configureSavedUserLocations \(self.savedLocations)")
-//        completion(self.savedLocations)
-//    }
-    
     func configureSavedUserLocations(completion: @escaping([MKPlacemark]) -> Void) {
         var placemarksToFetch = 0
         var fetchedPlacemarks = [MKPlacemark]()
