@@ -44,4 +44,11 @@ struct UserService {
             completion(error)
         }
     }
+    
+    func saveLocation(LocationString: String, type: LocationType, completion: @escaping(Error?, DatabaseReference) -> Void) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+        let key: String = type == .home ? "homeLocation" : "workLocation"
+        REF_USERS.child(currentUid).child(key).setValue(LocationString, withCompletionBlock: completion)
+    }
 }

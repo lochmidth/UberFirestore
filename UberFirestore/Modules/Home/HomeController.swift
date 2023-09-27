@@ -21,11 +21,15 @@ private enum ActionButtonConfiguration {
     }
 }
 
+protocol HomeControllerDelegate: AnyObject {
+    func handleMenuToggle(_ controller: HomeController)
+}
+
 class HomeController: UIViewController {
     
     //MARK: - Properties
     
-    private var viewModel = HomeViewModel()
+    var viewModel = HomeViewModel()
     
     private let LocationinputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
@@ -34,12 +38,15 @@ class HomeController: UIViewController {
     private let tableView = UITableView()
     private let mapView = MKMapView()
     
+    weak var delegate: HomeControllerDelegate?
+    
     
     private var searchResults = [MKPlacemark]()
+    private var savedLocations = [MKPlacemark]()
     
     private final let locationInputViewHeight: CGFloat = 200
     private final let rideActionViewHeight: CGFloat = 300
-
+    
     private var actionButtonConfig = ActionButtonConfiguration()
     
     private lazy var actionButton: UIButton = {
@@ -55,7 +62,7 @@ class HomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        signOut()
+        //        signOut()
         checkIfUserIsLoggedIn()
         viewModel.enableLocationServices()
     }
@@ -69,17 +76,9 @@ class HomeController: UIViewController {
     
     func checkIfUserIsLoggedIn() {
         if viewModel.isUserLoggedIn {
-            configureUI()
             fetchUser()
+            configureUI()
             LocationHandler.shared.delegate = self
-        } else {
-            DispatchQueue.main.async {
-                let controller = LoginController()
-                controller.delegate = self
-                let nav = UINavigationController(rootViewController: controller)
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true)
-            }
         }
     }
     
@@ -112,6 +111,7 @@ class HomeController: UIViewController {
                 self.fetchDrivers()
                 self.configureLocationInputActivationView()
                 self.observeCurrentTrip()
+                self.configureSavedLocations()
             } else {
                 self.observeTrips()
             }
@@ -160,7 +160,7 @@ class HomeController: UIViewController {
             guard let trip = self.viewModel.trip else { return }
             guard let state = trip.state else { return }
             guard let driverUid = self.viewModel.trip?.driverUid else { return }
-
+            
             
             switch state {
             case .requested:
@@ -202,16 +202,12 @@ class HomeController: UIViewController {
         }
     }
     
-    func signOut() {
-        viewModel.signOut()
-    }
-    
     //MARK: - Actions
     
     @objc func actionButtonPressed() {
         switch actionButtonConfig {
         case .showMenu:
-            print("DEBUG: Handle Show menu..")
+            delegate?.handleMenuToggle(self)
         case .dismissActionView:
             removeAnnotationsAndOverlays()
             mapView.showAnnotations(mapView.annotations, animated: true)
@@ -224,11 +220,12 @@ class HomeController: UIViewController {
         }
     }
     
-    @objc func didEnterRegion() {
-        
-    }
-    
     //MARK: - Helpers
+    
+    func configure(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
+        savedLocations = viewModel.savedLocations
+    }
     
     func configureUI() {
         configureMapView()
@@ -300,6 +297,13 @@ class HomeController: UIViewController {
         view.addSubview(tableView)
     }
     
+    func configureSavedLocations() {
+        viewModel.configureSavedUserLocations { placemarks in
+            self.savedLocations = placemarks
+            self.tableView.reloadData()
+        }
+    }
+    
     func dismissLocationView(completion: ((Bool) -> Void)? = nil) {
         UIView.animate(withDuration: 0.3, animations: {
             self.locationInputView.alpha = 0
@@ -339,15 +343,6 @@ class HomeController: UIViewController {
             actionButton.setImage(UIImage(named: "baseline_arrow_back_black_36dp")?.withRenderingMode(.alwaysOriginal), for: .normal)
             actionButtonConfig = .dismissActionView
         }
-    }
-}
-
-//MARK: - AuthenticationDelegate
-
-extension HomeController: AuthenticationDelegate {
-    func authenticationDidComplete() {
-        checkIfUserIsLoggedIn()
-        self.dismiss(animated: true)
     }
 }
 
@@ -448,12 +443,12 @@ extension HomeController: PickUpControllerDelegate {
             }
             
             self.animateRideActionView(shouldShow: true)
-//            NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterRegion), name: Notification.Name("NotificationIdentifier"), object: nil)
         }
         
         dismiss(animated: true)
     }
 }
+
 
 //MARK: - LocationHandlerDelegate
 
@@ -474,7 +469,6 @@ extension HomeController: LocationHandlerDelegate {
             viewModel.updateTripState(trip: trip, state: .driverArrived) {
                 self.viewModel.fetchUser(forUid: trip.passengerUid) { interlocutor in
                     self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: interlocutor, config: .pickupPassenger))
-    //                NotificationCenter.default.removeObserver(self)
                 }
             }
         }
@@ -482,7 +476,6 @@ extension HomeController: LocationHandlerDelegate {
             viewModel.updateTripState(trip: trip, state: .arrivedAtDestination) {
                 self.viewModel.fetchUser(forUid: trip.passengerUid) { interlocutor in
                     self.rideActionView.configure(viewModel: RideActionViewModel(user: self.viewModel.user, interlocutor: interlocutor, config: .endTrip))
-    //                NotificationCenter.default.removeObserver(self)
                 }
             }
         }
@@ -527,7 +520,7 @@ extension HomeController: MKMapViewDelegate {
 
 extension HomeController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "\(section.magnitude)"
+        return section == 0 ? "Saved Locations" : "Results"
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -535,7 +528,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : searchResults.count
+        return section == 0 ? savedLocations.count : searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -543,16 +536,14 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section == 1 {
             cell.configure(viewModel: LocationCellViewModel(placemark: searchResults[indexPath.row]))
-            //            cell.viewModel = LocationCellViewModel(destination: searchResults[indexPath.row])
         } else {
-            return UITableViewCell()
+            cell.configure(viewModel: LocationCellViewModel(placemark: savedLocations[indexPath.row]))
         }
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedPlacemark = searchResults[indexPath.row]
+        let selectedPlacemark = indexPath.section == 0 ? savedLocations[indexPath.row] : searchResults[indexPath.row]
         
         configureActionButton(config: .dismissActionView)
         

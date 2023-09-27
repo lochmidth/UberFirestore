@@ -10,6 +10,17 @@
 		5E951D74664912D331EA6F08 /* Pods_UberFirestore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 265FFF842EDE6D7CC8AF14C8 /* Pods_UberFirestore.framework */; };
 		C22A8E4F2AB87D8700038624 /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A8E4E2AB87D8700038624 /* LocationHandler.swift */; };
 		C22A8E512AB89B3300038624 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A8E502AB89B3300038624 /* DriverAnnotation.swift */; };
+		C24D8E4D2AC149A700AFA899 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E4C2AC149A700AFA899 /* MenuController.swift */; };
+		C24D8E4F2AC149C800AFA899 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E4E2AC149C800AFA899 /* ContainerController.swift */; };
+		C24D8E532AC1514700AFA899 /* MenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E522AC1514700AFA899 /* MenuHeader.swift */; };
+		C24D8E552AC1514E00AFA899 /* MenuHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E542AC1514E00AFA899 /* MenuHeaderViewModel.swift */; };
+		C24D8E572AC16EA600AFA899 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E562AC16EA600AFA899 /* MenuViewModel.swift */; };
+		C24D8E592AC16EAC00AFA899 /* ContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E582AC16EAC00AFA899 /* ContainerViewModel.swift */; };
+		C24D8E5E2AC1982A00AFA899 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E5D2AC1982A00AFA899 /* SettingsController.swift */; };
+		C24D8E622AC1988600AFA899 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E612AC1988600AFA899 /* SettingsViewModel.swift */; };
+		C24D8E642AC19C9B00AFA899 /* UserInfoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E632AC19C9B00AFA899 /* UserInfoHeader.swift */; };
+		C24D8E692AC19CC800AFA899 /* UserInfoHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E682AC19CC800AFA899 /* UserInfoHeaderViewModel.swift */; };
+		C24D8E6B2AC1CAD500AFA899 /* AddLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24D8E6A2AC1CAD500AFA899 /* AddLocationController.swift */; };
 		C25A7FCA2AB1CDA6006C09E7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A7FC92AB1CDA6006C09E7 /* AppDelegate.swift */; };
 		C25A7FCC2AB1CDA6006C09E7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A7FCB2AB1CDA6006C09E7 /* SceneDelegate.swift */; };
 		C25A7FD12AB1CDA6006C09E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C25A7FCF2AB1CDA6006C09E7 /* Main.storyboard */; };
@@ -47,6 +58,17 @@
 		2A329628C77B8CEE93D840C3 /* Pods-UberFirestore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberFirestore.debug.xcconfig"; path = "Target Support Files/Pods-UberFirestore/Pods-UberFirestore.debug.xcconfig"; sourceTree = "<group>"; };
 		C22A8E4E2AB87D8700038624 /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
 		C22A8E502AB89B3300038624 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
+		C24D8E4C2AC149A700AFA899 /* MenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		C24D8E4E2AC149C800AFA899 /* ContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
+		C24D8E522AC1514700AFA899 /* MenuHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeader.swift; sourceTree = "<group>"; };
+		C24D8E542AC1514E00AFA899 /* MenuHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeaderViewModel.swift; sourceTree = "<group>"; };
+		C24D8E562AC16EA600AFA899 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
+		C24D8E582AC16EAC00AFA899 /* ContainerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewModel.swift; sourceTree = "<group>"; };
+		C24D8E5D2AC1982A00AFA899 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		C24D8E612AC1988600AFA899 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		C24D8E632AC19C9B00AFA899 /* UserInfoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoHeader.swift; sourceTree = "<group>"; };
+		C24D8E682AC19CC800AFA899 /* UserInfoHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoHeaderViewModel.swift; sourceTree = "<group>"; };
+		C24D8E6A2AC1CAD500AFA899 /* AddLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationController.swift; sourceTree = "<group>"; };
 		C25A7FC62AB1CDA6006C09E7 /* UberFirestore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberFirestore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C25A7FC92AB1CDA6006C09E7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C25A7FCB2AB1CDA6006C09E7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +131,70 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C24D8E4B2AC1499900AFA899 /* Side Menu */ = {
+			isa = PBXGroup;
+			children = (
+				C24D8E5B2AC16EC300AFA899 /* Container */,
+				C24D8E5A2AC16EB100AFA899 /* Menu */,
+			);
+			path = "Side Menu";
+			sourceTree = "<group>";
+		};
+		C24D8E502AC14F6400AFA899 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				C28780972ABA197D00330B78 /* Login */,
+				C28780982ABA199100330B78 /* Register */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		C24D8E512AC1512500AFA899 /* MenuHeader */ = {
+			isa = PBXGroup;
+			children = (
+				C24D8E522AC1514700AFA899 /* MenuHeader.swift */,
+				C24D8E542AC1514E00AFA899 /* MenuHeaderViewModel.swift */,
+			);
+			path = MenuHeader;
+			sourceTree = "<group>";
+		};
+		C24D8E5A2AC16EB100AFA899 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				C24D8E4C2AC149A700AFA899 /* MenuController.swift */,
+				C24D8E562AC16EA600AFA899 /* MenuViewModel.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		C24D8E5B2AC16EC300AFA899 /* Container */ = {
+			isa = PBXGroup;
+			children = (
+				C24D8E4E2AC149C800AFA899 /* ContainerController.swift */,
+				C24D8E582AC16EAC00AFA899 /* ContainerViewModel.swift */,
+			);
+			path = Container;
+			sourceTree = "<group>";
+		};
+		C24D8E5C2AC1981100AFA899 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C24D8E5D2AC1982A00AFA899 /* SettingsController.swift */,
+				C24D8E612AC1988600AFA899 /* SettingsViewModel.swift */,
+				C24D8E6A2AC1CAD500AFA899 /* AddLocationController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C24D8E672AC19CA700AFA899 /* UserInfoHeader */ = {
+			isa = PBXGroup;
+			children = (
+				C24D8E632AC19C9B00AFA899 /* UserInfoHeader.swift */,
+				C24D8E682AC19CC800AFA899 /* UserInfoHeaderViewModel.swift */,
+			);
+			path = UserInfoHeader;
+			sourceTree = "<group>";
+		};
 		C25A7FBD2AB1CDA6006C09E7 = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +219,7 @@
 				C25A7FE22AB1CE00006C09E7 /* Model */,
 				C25A7FE12AB1CDFE006C09E7 /* View */,
 				C28780962ABA197200330B78 /* Modules */,
+				C24D8E5C2AC1981100AFA899 /* Settings */,
 				C25A7FDD2AB1CDE8006C09E7 /* Services */,
 				C25A7FE32AB1CE1F006C09E7 /* Helpers */,
 				C25A7FC92AB1CDA6006C09E7 /* AppDelegate.swift */,
@@ -160,10 +247,12 @@
 			isa = PBXGroup;
 			children = (
 				C2AF22172AB34A9D001CB903 /* AuthButton.swift */,
+				C24D8E512AC1512500AFA899 /* MenuHeader */,
 				C2BCFC332AB4855A00A67E29 /* LocationInputActivationView.swift */,
 				C2BCFC352AB491EC00A67E29 /* LocationInputView.swift */,
 				C287809F2ABA743C00330B78 /* LocationCell */,
 				C28780A22ABB121100330B78 /* RideActionView */,
+				C24D8E672AC19CA700AFA899 /* UserInfoHeader */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -201,8 +290,8 @@
 		C28780962ABA197200330B78 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				C28780972ABA197D00330B78 /* Login */,
-				C28780982ABA199100330B78 /* Register */,
+				C24D8E502AC14F6400AFA899 /* Authentication */,
+				C24D8E4B2AC1499900AFA899 /* Side Menu */,
 				C28780992ABA19BE00330B78 /* Home */,
 				C263F69D2ABCAD7300BFB80F /* Pickup */,
 			);
@@ -370,31 +459,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C24D8E4F2AC149C800AFA899 /* ContainerController.swift in Sources */,
 				C22A8E4F2AB87D8700038624 /* LocationHandler.swift in Sources */,
 				C28780932ABA062100330B78 /* HomeViewModel.swift in Sources */,
+				C24D8E532AC1514700AFA899 /* MenuHeader.swift in Sources */,
 				C263F6A12ABCADFA00BFB80F /* PickupViewModel.swift in Sources */,
 				C28780A42ABB122200330B78 /* RideActionViewModel.swift in Sources */,
 				C28780A12ABB10FF00330B78 /* RideActionView.swift in Sources */,
 				C28780A62ABB7FEB00330B78 /* TripService.swift in Sources */,
 				C28780A82ABB87EF00330B78 /* Trip.swift in Sources */,
+				C24D8E552AC1514E00AFA899 /* MenuHeaderViewModel.swift in Sources */,
 				C28302D52AB872B000CB64C2 /* UserService.swift in Sources */,
+				C24D8E4D2AC149A700AFA899 /* MenuController.swift in Sources */,
 				C2AF22162AB33F88001CB903 /* RegisterController.swift in Sources */,
 				C2AF22182AB34A9D001CB903 /* AuthButton.swift in Sources */,
 				C2BCFC342AB4855A00A67E29 /* LocationInputActivationView.swift in Sources */,
+				C24D8E572AC16EA600AFA899 /* MenuViewModel.swift in Sources */,
 				C25A7FCA2AB1CDA6006C09E7 /* AppDelegate.swift in Sources */,
+				C24D8E592AC16EAC00AFA899 /* ContainerViewModel.swift in Sources */,
 				C25A7FE52AB1CEB1006C09E7 /* LoginController.swift in Sources */,
 				C2BCFC382AB78AC300A67E29 /* LocationCell.swift in Sources */,
+				C24D8E622AC1988600AFA899 /* SettingsViewModel.swift in Sources */,
+				C24D8E5E2AC1982A00AFA899 /* SettingsController.swift in Sources */,
 				C287809B2ABA1E7000330B78 /* MKLocalSearchManager.swift in Sources */,
 				C22A8E512AB89B3300038624 /* DriverAnnotation.swift in Sources */,
 				C2BCFC322AB46E0400A67E29 /* HomeController.swift in Sources */,
 				C2BCFC362AB491EC00A67E29 /* LocationInputView.swift in Sources */,
+				C24D8E6B2AC1CAD500AFA899 /* AddLocationController.swift in Sources */,
 				C25A7FCC2AB1CDA6006C09E7 /* SceneDelegate.swift in Sources */,
 				C25A7FE72AB1D10B006C09E7 /* Extensions.swift in Sources */,
 				C263F69F2ABCADA300BFB80F /* PickupController.swift in Sources */,
 				C2BCFC2B2AB4653300A67E29 /* User.swift in Sources */,
 				C287809D2ABA69C000330B78 /* RegisterViewModel.swift in Sources */,
+				C24D8E642AC19C9B00AFA899 /* UserInfoHeader.swift in Sources */,
 				C2733F582AB8F15C00C24E4E /* LocationCellViewModel.swift in Sources */,
 				C2BCFC2D2AB466AB00A67E29 /* AuthService.swift in Sources */,
+				C24D8E692AC19CC800AFA899 /* UserInfoHeaderViewModel.swift in Sources */,
 				C28780952ABA155800330B78 /* LoginViewModel.swift in Sources */,
 				C2BCFC2F2AB4679D00A67E29 /* Constants.swift in Sources */,
 			);
