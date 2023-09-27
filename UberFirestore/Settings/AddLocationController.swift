@@ -46,8 +46,6 @@ class AddLocationController: UITableViewController {
         configureTableView()
         configureSearchBar()
         configureSearchComleter()
-        
-        print("DEBUG: Type is \(type)")
     }
 
     //MARK: - API
@@ -120,8 +118,6 @@ extension AddLocationController: UISearchBarDelegate {
 extension AddLocationController: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         searchResults = completer.results
-        
-        print("DEBUG: Search results: \(searchResults)")
         
         tableView.reloadData()
     }
