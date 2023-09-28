@@ -49,6 +49,7 @@
 		C2BCFC342AB4855A00A67E29 /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC332AB4855A00A67E29 /* LocationInputActivationView.swift */; };
 		C2BCFC362AB491EC00A67E29 /* LocationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC352AB491EC00A67E29 /* LocationInputView.swift */; };
 		C2BCFC382AB78AC300A67E29 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BCFC372AB78AC300A67E29 /* LocationCell.swift */; };
+		C2DB4D022AC4620100C71030 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DB4D012AC4620000C71030 /* CircularProgressView.swift */; };
 		C2DD7A212AB36A2200E228AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2DD7A202AB36A2200E228AF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -99,6 +100,7 @@
 		C2BCFC332AB4855A00A67E29 /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
 		C2BCFC352AB491EC00A67E29 /* LocationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputView.swift; sourceTree = "<group>"; };
 		C2BCFC372AB78AC300A67E29 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		C2DB4D012AC4620000C71030 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		C2DD7A202AB36A2200E228AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -253,6 +255,7 @@
 				C287809F2ABA743C00330B78 /* LocationCell */,
 				C28780A22ABB121100330B78 /* RideActionView */,
 				C24D8E672AC19CA700AFA899 /* UserInfoHeader */,
+				C2DB4D012AC4620000C71030 /* CircularProgressView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 				C2BCFC2D2AB466AB00A67E29 /* AuthService.swift in Sources */,
 				C24D8E692AC19CC800AFA899 /* UserInfoHeaderViewModel.swift in Sources */,
 				C28780952ABA155800330B78 /* LoginViewModel.swift in Sources */,
+				C2DB4D022AC4620100C71030 /* CircularProgressView.swift in Sources */,
 				C2BCFC2F2AB4679D00A67E29 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
