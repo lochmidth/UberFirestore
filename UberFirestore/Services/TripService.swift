@@ -69,7 +69,7 @@ struct TripService {
     func updateTripState(trip: Trip, state: TripState, completion: @escaping(Error?, DatabaseReference) -> Void) {
         REF_TRIPS.child(trip.passengerUid).child("state").setValue(state.rawValue, withCompletionBlock: completion)
         
-        if state == .completed {
+        if state == .completed || state == .denied {
             REF_TRIPS.child(trip.passengerUid).removeAllObservers()
         }
     }

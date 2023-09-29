@@ -24,6 +24,17 @@ class PickupViewModel {
         }
     }
     
+    func updateTripStateToDenied(completion: @escaping() -> Void ) {
+        TripService.shared.updateTripState(trip: trip, state: .denied) { error, ref in
+            if let error {
+                print("DEBUG: Error while updating the trip state to denied, \(error.localizedDescription)")
+                return
+            }
+            
+            completion()
+        }
+    }
+    
     init(trip: Trip) {
         self.trip = trip
     }

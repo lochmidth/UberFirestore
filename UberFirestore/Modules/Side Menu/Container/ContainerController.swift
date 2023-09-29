@@ -217,6 +217,6 @@ extension ContainerController: SettingsControllerDelegate {
         guard let user = controller.viewModel?.user else { return }
         configure(viewModel: ContainerViewModel(user: user))
         homeController.viewModel.user = user
-        
+        homeController.reloadTableview()
     }
 }

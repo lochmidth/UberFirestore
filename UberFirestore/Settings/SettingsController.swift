@@ -43,7 +43,9 @@ class SettingsController: UITableViewController {
     weak var delegate: SettingsControllerDelegate?
     
     var viewModel: SettingsViewModel? {
-        didSet { configure() }
+        didSet {
+            self.tableView.reloadData()
+        }
     }
     
     private lazy var infoHeader = UserInfoHeader()
@@ -83,7 +85,8 @@ class SettingsController: UITableViewController {
         navigationItem.title = "Settings"
         navigationController?.navigationBar.barTintColor = .backgroundColor
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "baseline_clear_white_36pt_2x")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleDismissal))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "baseline_clear_white_36pt_2x"), style: .plain, target: self, action: #selector(handleDismissal))
+        navigationItem.leftBarButtonItem?.tintColor = .black
         
         tableView.tableHeaderView = infoHeader
         tableView.tableFooterView = UIView()
@@ -91,12 +94,6 @@ class SettingsController: UITableViewController {
         infoHeader.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
         guard let user = self.viewModel?.user else { return }
         infoHeader.configure(viewModel: UserInfoHeaderViewModel(user: user))
-    }
-    
-    func configure() {
-//        guard let viewModel = viewModel else { return }
-        
-        
     }
 }
 
@@ -163,8 +160,8 @@ extension SettingsController: AddLocationControllerDelegate {
             case .work:
                 user.workLocation = locationString
             }
+            
+            self.viewModel = SettingsViewModel(user: user)
         }
-        
-        self.tableView.reloadData()
     }
 }
