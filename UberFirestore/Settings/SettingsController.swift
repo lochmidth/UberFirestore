@@ -42,6 +42,7 @@ class SettingsController: UITableViewController {
     
     weak var delegate: SettingsControllerDelegate?
     
+
     var viewModel: SettingsViewModel? {
         didSet {
             self.tableView.reloadData()
