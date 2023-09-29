@@ -15,6 +15,10 @@ extension UIColor {
     
     static let backgroundColor = UIColor.rgb(red: 25, green: 25, blue: 25)
     static let mainBlueTint = UIColor.rgb(red: 71, green: 154, blue: 237)
+    static let outlineStrokeColor = UIColor.rgb(red: 234, green: 46, blue: 111)
+    static let trackStrokeColor = UIColor.rgb(red: 56, green: 25, blue: 49)
+    static let pulsatingFillColor = UIColor.rgb(red: 86, green: 30, blue: 63)
+
 }
 
 extension UIViewController {

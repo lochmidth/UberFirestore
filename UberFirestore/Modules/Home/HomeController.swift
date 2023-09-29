@@ -165,6 +165,15 @@ class HomeController: UIViewController {
             switch state {
             case .requested:
                 break
+            case .denied:
+                self.shouldPresentLoadingView(false)
+                self.showMessage(withTitle: "Oops!", message: "It could like we couldn't find you a driver. Please try again...")
+                self.viewModel.deleteTrip {
+                    self.mapView.centerMapOnUserLocation()
+                    self.configureActionButton(config: .showMenu)
+                    self.LocationinputActivationView.alpha = 1
+                    self.removeAnnotationsAndOverlays()
+                }
             case .accepted:
                 self.shouldPresentLoadingView(false)
                 self.removeAnnotationsAndOverlays()
@@ -221,6 +230,10 @@ class HomeController: UIViewController {
     }
     
     //MARK: - Helpers
+    
+    func reloadTableview() {
+        tableView.reloadData()
+    }
     
     func configure(viewModel: HomeViewModel) {
         self.viewModel = viewModel

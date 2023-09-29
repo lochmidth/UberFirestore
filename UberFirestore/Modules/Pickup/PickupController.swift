@@ -16,6 +16,8 @@ class PickupController: UIViewController {
     
     //MARK: - Properties
     
+    private var tripAccepted = false
+    
     var viewModel: PickupViewModel? {
         didSet { configure() }
     }
@@ -84,12 +86,17 @@ class PickupController: UIViewController {
     
     @objc func animateProgress() {
         circularProgressView.animatePuslsatingLayer()
-        circularProgressView.setProgressWithAnimation(duration: 5, value: 0) {
-//            self.dismiss(animated: true)
+        circularProgressView.setProgressWithAnimation(duration: 15, value: 0) {
+            if self.tripAccepted == false {
+                self.viewModel?.updateTripStateToDenied(completion: {
+                    self.dismiss(animated: true)
+                })
+            }
         }
     }
     
     @objc func handleAccept() {
+        self.tripAccepted = true
         guard let viewModel else { return }
         viewModel.handleAcceptTrip(trip: viewModel.trip) {
             self.delegate?.didAcceptTrip(viewModel.trip)
